@@ -3,11 +3,15 @@
 keyPath=/home/nm/.key/hashtag_2_key
 cName=mcms-form
 
-pushd ./dist/$cName > /dev/null || exit
+pushd ./dist/$cName >/dev/null || exit
 
 echo "deploying to tdrs fake cdn..."
 
-tar -czf ../mcms-form.tgz ./*.js ./*.js.map ./*.css ./*.css.map 3rdpartylicenses.txt || exit
+cp ../../cdn-index.html ../../index.html || exit
+
+tar -czf ../mcms-form.tgz ../../index.html ./*.js ./*.js.map ./*.css ./*.css.map 3rdpartylicenses.txt || exit
+
+rm ../../index.html || exit
 
 targetPath=/var/www/tdrs.ro/fake-cdn/
 
@@ -18,4 +22,4 @@ rm ../mcms-form.tgz
 
 echo "done!"
 
-popd > /dev/null || exit
+popd >/dev/null || exit
