@@ -1,0 +1,7 @@
+<ckeditor
+  class="bordered d-block"
+  [config]="CKEDITOR_CONFIG"
+  [editor]="Editor"
+  [formControl]="formControl"
+  (keyup.enter)="$event.stopPropagation();"
+></ckeditor>

@@ -1,0 +1,14 @@
+<ng-container *ngIf="isDebug">
+
+<button type="button" class="btn btn-outline-secondary" (click)="toggleConfig()">Show config</button>
+<pre *ngIf="configShown">{{debugObj | json}}</pre>
+</ng-container>
+<ng-container *ngIf="loaded">
+  <mcms-form
+    [schemaName]="schemaName"
+    [action]="action"
+    [additionalFields]="additionalFieldsParsed"
+    [options]="optionsParsed"
+    (done)="onDone($event)"
+  ></mcms-form>
+</ng-container>

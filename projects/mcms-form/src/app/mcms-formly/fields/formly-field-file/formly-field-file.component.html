@@ -1,0 +1,59 @@
+<!--<div>{{customFieldConfigClone | json}}</div>-->
+<div class="file-wrapper p-2" [ngClass]="{'has-error': showError}">
+  <div>
+    <ngx-file-drop dropZoneLabel="text old"
+                   class="mb-2"
+                   #fileDropComponent
+                   (click)="fileDropComponent.openFileSelector($event)"
+                   (onFileDrop)="dropped($event)"
+                   (onFileOver)="onFileOver($event)"
+                   (onFileLeave)="onFileLeave($event)"
+                   [multiple]="customFieldConfig.multiple"
+                   [accept]="customFieldConfig.accept"
+                   [contentClassName]="'content-class d-flex justify-content-center align-items-center'"
+                   [showBrowseBtn]="true"
+                   [dropZoneClassName]="'p-3 drop-zone' + (isFileOver ? ' files-over' : '')"
+                   [browseBtnClassName]="'btn btn-outline-primary ml-2'"
+                   [browseBtnLabel]="'Browse files old'"
+                   [hidden]="processedFiles.length && !customFieldConfig.multiple"
+    >
+      <ng-template ngx-file-drop-content-tmp>
+        Drop files here or
+        <button type="button" class="btn btn-outline-primary ml-2">Browse files</button>
+      </ng-template>
+    </ngx-file-drop>
+    <div *ngIf="processedFiles.length">
+      <div *ngFor="let item of processedFiles; let i=index">
+        <b class="px-2">{{ item.name }}</b> | <b class="px-2">{{item.state}}
+        <span *ngIf="item.state === 'uploading'">{{item.progress | number:'1.2-2'}}%</span>
+        <span *ngIf="item.state === 'error' && item.errorReason">: {{item.errorReason}}</span>
+      </b>
+        <button (click)="remove(i)" class="btn btn-outline-danger btn-sm" type="button">
+          <ng-container *ngTemplateOutlet="removeSvgTemplate"></ng-container>
+        </button>
+
+        <button (click)="retry(i)" class="btn btn-outline-info btn-sm ml-2" type="button"
+                *ngIf="item.state === 'error'">
+          <ng-container *ngTemplateOutlet="redoSvg"></ng-container>
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+<ng-template #removeSvgTemplate>
+  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor"
+       xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd"
+          d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+  </svg>
+</ng-template>
+
+<ng-template #redoSvg>
+  <svg focusable="false" data-prefix="fas" data-icon="redo" width="1em" height="1em"
+       role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <path fill="currentColor"
+          d="M500.33 0h-47.41a12 12 0 0 0-12 12.57l4 82.76A247.42 247.42 0 0 0 256 8C119.34 8 7.9 119.53 8 256.19 8.1 393.07 119.1 504 256 504a247.1 247.1 0 0 0 166.18-63.91 12 12 0 0 0 .48-17.43l-34-34a12 12 0 0 0-16.38-.55A176 176 0 1 1 402.1 157.8l-101.53-4.87a12 12 0 0 0-12.57 12v47.41a12 12 0 0 0 12 12h200.33a12 12 0 0 0 12-12V12a12 12 0 0 0-12-12z"></path>
+  </svg>
+</ng-template>

@@ -1,0 +1,23 @@
+.drop-zone {
+  margin: auto;
+  border: 4px dotted #bdbdbd;
+  border-radius: 10px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+
+  &.files-over {
+    border-color: green;
+    background-color: rgba(0, 200, 0, 0.2);
+  }
+}
+
+.file-wrapper {
+  //#ced4da
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+
+  &.has-error {
+    border-color: #dc3545;
+  }
+}

@@ -1,0 +1,13 @@
+<div class="d-flex flex-wrap flex-column flex-sm-row">
+  <input
+    [formControl]="dateFormControl"
+    class="form-control width-auto mt-1 mr-3"
+    [formlyAttributes]="field"
+    [class.is-invalid]="showError"
+    ngbDatepicker
+    #d="ngbDatepicker"
+    (click)="d.toggle()"
+  />
+  <ngb-timepicker [formControl]="timeFormControl" [meridian]="true" [spinners]="false"
+                  class="mt-1"></ngb-timepicker>
+</div>
