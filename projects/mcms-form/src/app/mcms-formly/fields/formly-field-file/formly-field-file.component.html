@@ -6,8 +6,8 @@
                    #fileDropComponent
                    (click)="fileDropComponent.openFileSelector($event)"
                    (onFileDrop)="dropped($event)"
-                   (onFileOver)="onFileOver($event)"
-                   (onFileLeave)="onFileLeave($event)"
+                   (onFileOver)="onFileOver()"
+                   (onFileLeave)="onFileLeave()"
                    [multiple]="customFieldConfig.multiple"
                    [accept]="customFieldConfig.accept"
                    [contentClassName]="'content-class d-flex justify-content-center align-items-center'"

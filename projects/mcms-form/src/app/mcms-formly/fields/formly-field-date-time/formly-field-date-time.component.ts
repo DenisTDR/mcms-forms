@@ -47,7 +47,7 @@ export class FormlyFieldDateTimeComponent extends FieldType implements OnInit, O
     this.propagateForward();
   }
 
-  private propagateForward() {
+  private propagateForward(): void {
     const value = this.formControl.value;
     if (!value) {
       return;
@@ -63,7 +63,7 @@ export class FormlyFieldDateTimeComponent extends FieldType implements OnInit, O
     }
   }
 
-  private propagateBackward() {
+  private propagateBackward(): void {
     const value = [this.dateFormControl.value, this.timeFormControl.value].filter(v => v).join('T');
     if (this.formControl.value !== value) {
       this.formControl.setValue(value);

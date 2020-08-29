@@ -53,7 +53,7 @@ export class FormlyFieldAutocompleteComponent extends FieldType implements OnIni
     }
   }
 
-  private buildSearchFn() {
+  private buildSearchFn(): void {
     this.searchFn = (text$: Observable<string>) => {
       const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
       const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));

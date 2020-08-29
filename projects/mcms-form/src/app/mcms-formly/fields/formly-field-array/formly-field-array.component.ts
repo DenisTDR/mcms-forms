@@ -57,7 +57,7 @@ export class FormlyFieldArrayComponent extends FieldArrayType implements OnInit 
     }
   }
 
-  private forceAdjustToMinLength() {
+  private forceAdjustToMinLength(): void {
     if (this.model && this.minLength && this.currentLength < this.minLength) {
       setTimeout(() => {
         while (this.currentLength < this.minLength) {
@@ -75,15 +75,15 @@ export class FormlyFieldArrayComponent extends FieldArrayType implements OnInit 
     super.remove(i);
   }
 
-  public get isSortable() {
+  public get isSortable(): boolean {
     return this.field.templateOptions.sortable;
   }
 
-  public get minLength() {
+  public get minLength(): number {
     return this.field.templateOptions.minLength;
   }
 
-  public get maxLength() {
+  public get maxLength(): number {
     return this.field.templateOptions.maxLength;
   }
 

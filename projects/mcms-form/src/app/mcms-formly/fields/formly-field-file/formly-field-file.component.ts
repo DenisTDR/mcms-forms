@@ -47,7 +47,7 @@ export class FormlyFieldFileComponent extends FieldType implements OnInit {
 
   public processedFiles: ProcessedFile[] = [];
 
-  public dropped(files: NgxFileDropEntry[]) {
+  public dropped(files: NgxFileDropEntry[]): void {
     this.isFileOver = false;
 
     for (const droppedFile of files) {
@@ -99,12 +99,12 @@ export class FormlyFieldFileComponent extends FieldType implements OnInit {
     }
   }
 
-  public updateValueAndState() {
+  public updateValueAndState(): void {
     this.updateState();
     this.updateValue();
   }
 
-  public updateState() {
+  public updateState(): void {
     if (this.processedFiles.length === 0) {
       this.state = 'empty';
     } else if (this.processedFiles.some(file => file.state === 'uploading')) {
@@ -121,7 +121,7 @@ export class FormlyFieldFileComponent extends FieldType implements OnInit {
     }
   }
 
-  public updateValue() {
+  public updateValue(): void {
     let value;
     // console.log('updateValue with ' + this.state);
     switch (this.state) {
@@ -149,12 +149,12 @@ export class FormlyFieldFileComponent extends FieldType implements OnInit {
     this.customFieldConfig.stateChanged = this.stateSubject.asObservable();
     this.customFieldConfig.uploadTrigger = new EventEmitter<any>();
     this.customFieldConfig.uploadTrigger.subscribe(() => {
-      this.doUpload().then();
+      this.doUpload();
     });
     this.loadInitialValue();
   }
 
-  private loadInitialValue() {
+  private loadInitialValue(): void {
     if (!this.formControl.value) {
       return;
     }
@@ -168,17 +168,15 @@ export class FormlyFieldFileComponent extends FieldType implements OnInit {
     }
   }
 
-  public onFileOver(event) {
+  public onFileOver(): void {
     this.isFileOver = true;
   }
 
-  public onFileLeave(event) {
+  public onFileLeave(): void {
     this.isFileOver = false;
   }
 
-  public async doUpload() {
-    // console.log('doUpload');
-
+  public doUpload(): void {
     const filesToUpload = this.processedFiles.filter(file => file.state === 'added');
 
     for (const fileToUpload of filesToUpload) {
@@ -187,7 +185,7 @@ export class FormlyFieldFileComponent extends FieldType implements OnInit {
     this.updateValueAndState();
   }
 
-  public beginUpload(fileToUpload: ProcessedFile) {
+  public beginUpload(fileToUpload: ProcessedFile): void {
     fileToUpload.state = 'uploading';
     const formData = new FormData();
     formData.append('file', fileToUpload.systemFile, fileToUpload.systemFile.name);
