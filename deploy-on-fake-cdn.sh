@@ -15,8 +15,11 @@ rm ../../index.html || exit
 
 targetPath=/var/www/tdrs.ro/fake-cdn/
 
-scp -i $keyPath ../mcms-form.tgz root@tdrs.ro:$targetPath/public_html
-ssh -i $keyPath root@tdrs.ro "$targetPath/deploy-mcms-form.sh"
+echo "uploading ..."
+scp -i $keyPath ../mcms-form.tgz root@tdrs.ro:$targetPath/public_html || exit
+
+echo "deploying ..."
+ssh -i $keyPath root@tdrs.ro "$targetPath/deploy-mcms-form.sh" || exit
 
 rm ../mcms-form.tgz
 
