@@ -17,6 +17,7 @@ import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
     [editable]='false'
     [formlyAttributes]="field"
     [class.is-invalid]="showError"
+    container="body"
     #instance="ngbTypeahead"/>
   `,
 })
