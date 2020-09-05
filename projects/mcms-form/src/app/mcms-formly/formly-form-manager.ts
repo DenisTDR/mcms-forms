@@ -145,6 +145,8 @@ export class FormlyFormManager {
     for (const field of source) {
       if (field.type === 'file') {
         list.push(field);
+      } else if (field.type === 'array' || field.type === 'formly-group') {
+        list.push(...this.getFileFields(field.fieldGroup));
       }
     }
     return list;
