@@ -1,5 +1,15 @@
 #!/bin/bash
 
+if [ -z "$1" ]
+  then
+    echo "No version argument supplied. taking from package.json"
+    node extract_version.js
+    version=$(cat version.txt)
+    rm version.txt
+  else
+    version=$1
+fi
+
 keyPath=/home/nm/.key/hashtag_2_key
 cName=mcms-form
 
@@ -20,7 +30,7 @@ scp -i $keyPath ../mcms-form.tgz tdr@tdrs.ro:~/ || exit
 ssh -i $keyPath tdr@tdrs.ro "sudo mv ~/mcms-form.tgz $targetPath/public_html" || exit
 
 echo "deploying ..."
-ssh -i $keyPath tdr@tdrs.ro "sudo $targetPath/deploy-mcms-form.sh" || exit
+ssh -i $keyPath tdr@tdrs.ro "sudo $targetPath/deploy-mcms-form.sh $version" || exit
 
 rm ../mcms-form.tgz
 
