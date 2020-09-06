@@ -3,22 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <title>MCMS Forms</title>
+  <style>
+    small {
+      color: rgba(0, 0, 0, .5);
+    }
+  </style>
 </head>
 <body>
 <h1>MCMS Forms</h1>
 <div>
-  Temporary CDN for MCMS web component bundle
+  <div>Temporary CDN for MCMS web component bundle</div>
   <ul>
     <li>
-      <a href="./mcms-form.main.js">mcms-form.main.js</a> (<a href="./mcms-form.main.js.map">map</a>)
+      /mcms-form/[version]/mcms-form.main.js <small>/mcms-form/[version]/mcms-form.main.js.map</small>
     </li>
     <li>
-      <a href="./mcms-form.polyfills.js">mcms-form.polyfills.js</a> (<a href="./mcms-form.polyfills.js.map">map</a>)
+      /mcms-form/[version]/mcms-form.polyfills.js <small>/mcms-form/[version]/mcms-form.polyfills.js.map </small>
     </li>
     <li>
-      <a href="./styles.css">styles.css</a> (<a href="./styles.css.map">map</a>)
+      /mcms-form/[version]/styles.css <small>/mcms-form/[version]/styles.css.map</small>
     </li>
   </ul>
+  <div>Latest version: {{version}}</div>
+  <ul>
+    <li>
+      <a href="/mcms-form/{{version}}/mcms-form.main.js">mcms-form.main.js</a>
+      <small><a href="/mcms-form/{{version}}/mcms-form.main.js.map">mcms-form.main.js.map</a></small>
+    </li>
+    <li>
+      <a href="/mcms-form/{{version}}/mcms-form.polyfills.js">mcms-form.polyfills.js</a>
+      <small><a href="/mcms-form/{{version}}/mcms-form.polyfills.js.map">mcms-form.polyfills.js.map</a></small>
+    </li>
+    <li>
+      <a href="/mcms-form/{{version}}/styles.css">styles.css</a>
+      <small><a href="/mcms-form/{{version}}/styles.css.map">styles.css.map</a></small>
+    </li>
+  </ul>
+  <div>
+    <a href="https://www.nuget.org/packages/MCMS.Forms/">Nuget Package</a> with a razor view to include those scripts.
+  </div>
+  <div>
+    <a href="https://github.com/DenisTDR/mcms-forms/">git repo</a>
+  </div>
+  <hr/>
+  <div>
+    For older versions check <i>/mcms-form/[version]/</i>
+  </div>
 </div>
 </body>
 </html>

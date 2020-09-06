@@ -1,0 +1,38 @@
+@using System.Reflection
+@using MCMS.Forms
+@{
+    var basePath = Environment.GetEnvironmentVariable("MCMS_FORM_SCRIPTS_PATH") is {} path && !string.IsNullOrEmpty(path) ? path : "https://fake-cdn.tdrs.ro/mcms-form/";
+    if (basePath.EndsWith("/"))
+    {
+        basePath = basePath.Substring(0, basePath.Length - 1);
+    }
+    var version = typeof(ServiceCollectionExtensions).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;;
+    basePath += $"/{version}";
+}
+<script>
+    var mcmsFormScripts = {
+        load: function () {
+            if (this.loaded) { return; }
+            this.loaded = true;
+            for (var i = 0; i < this.files.js.length; i++) {
+                var script = document.createElement('script');
+                script.src = this.files.js[i];
+                document.body.appendChild(script);
+            }
+            for (var j = 0; j < this.files.css.length; j++) {
+                var link = document.createElement('link');
+                link.href = this.files.css[j];
+                link.rel = 'stylesheet';
+                document.head.appendChild(link);
+            }
+        },
+        loaded: false,
+        files: {
+            js: [
+               "@basePath/mcms-form.polyfills.js",
+               "@basePath/mcms-form.main.js"
+            ],
+            css:  ["@basePath/styles.css"]
+        }
+    }
+</script>

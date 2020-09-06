@@ -6,6 +6,7 @@ if [ -z "$1" ]
     node extract_version.js
     version=$(cat version.txt)
     rm version.txt
+    echo "Found version $version"
   else
     version=$1
 fi
@@ -17,11 +18,9 @@ pushd ./dist/$cName >/dev/null || exit
 
 echo "deploying to tdrs fake cdn..."
 
-cp ../../cdn-index.html ../../index.html || exit
+sed "s/{{version}}/$version/g" ../../cdn-index.html > ./index.html || exit
 
-tar -czf ../mcms-form.tgz ../../index.html ./*.js ./*.js.map ./*.css ./*.css.map 3rdpartylicenses.txt || exit
-
-rm ../../index.html || exit
+tar -czf ../mcms-form.tgz ./index.html ./*.js ./*.js.map ./*.css ./*.css.map 3rdpartylicenses.txt || exit
 
 targetPath=/var/www/tdrs.ro/fake-cdn
 
