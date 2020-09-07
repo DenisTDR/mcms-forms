@@ -1,11 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk.Razor">
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <RootNamespace>MCMS.Forms</RootNamespace>
         <AssemblyName>MCMS.Forms</AssemblyName>
         <PackageId>MCMS.Forms</PackageId>
-        <Version>1.0.4</Version>
+        <Version>1.0.6</Version>
         <Authors>TDR</Authors>
         <Company>TDR</Company>
         <Title>MCMS Forms js scripts</Title>
@@ -15,12 +14,10 @@
         <RepositoryType>git</RepositoryType>
         <PackageProjectUrl>https://fake-cdn.tdrs.ro/mcms-form/</PackageProjectUrl>
         <OutputType>Library</OutputType>
+        <IsPackable>true</IsPackable>
+        <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     </PropertyGroup>
     <ItemGroup>
-      <EmbeddedResource Include="Views\MCMSFormScripts.cshtml" />
-    </ItemGroup>
-    <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.7" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.7" />
     </ItemGroup>
 </Project>
