@@ -11,6 +11,11 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'mcms-form',
   templateUrl: './mcms-form.component.html',
+  styles: [`
+    :host {
+      display: flex;
+    }
+  `],
 })
 export class McmsFormComponent implements OnInit, AfterViewInit {
 
