@@ -93,12 +93,16 @@ export class McmsFormComponent implements OnInit, AfterViewInit {
       return;
     }
     try {
-      const result = await this.formManager.submit(this.model);
-      if (result) {
-        if (result.model) {
-          this.model = result.model;
+      if (this.options && this.options.skipApiRequest) {
+        this.done.emit({model: this.model});
+      } else {
+        const result = await this.formManager.submit(this.model);
+        if (result) {
+          if (result.model) {
+            this.model = result.model;
+          }
+          this.done.emit(result);
         }
-        this.done.emit(result);
       }
     } catch (e) {
       console.error(e);
