@@ -14,6 +14,7 @@ import { environment } from '../../../environments/environment';
   styles: [`
     :host {
       display: flex;
+      justify-content: center;
     }
   `],
 })

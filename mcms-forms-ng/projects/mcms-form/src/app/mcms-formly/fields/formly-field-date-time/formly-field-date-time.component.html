@@ -4,6 +4,7 @@
     class="form-control width-auto mt-1 mr-3"
     [formlyAttributes]="field"
     [class.is-invalid]="showError"
+    container="body"
     ngbDatepicker
     #d="ngbDatepicker"
     (click)="d.toggle()"

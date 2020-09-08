@@ -12,6 +12,7 @@ import { CustomDateParserFormatter } from './custom-date-parser.formatter';
       class="form-control"
       [formlyAttributes]="field"
       [class.is-invalid]="showError"
+      container="body"
       ngbDatepicker
       #d="ngbDatepicker"
       (click)="d.toggle()"
