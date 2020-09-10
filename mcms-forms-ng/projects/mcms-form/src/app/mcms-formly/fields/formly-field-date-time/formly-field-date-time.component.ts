@@ -71,8 +71,10 @@ export class FormlyFieldDateTimeComponent extends FieldType implements OnInit, O
   }
 
   public ngOnDestroy(): void {
-    for (const subscription of this.subscriptions) {
-      subscription.unsubscribe();
+    if (this.subscriptions) {
+      for (const subscription of this.subscriptions) {
+        subscription.unsubscribe();
+      }
     }
   }
 }
