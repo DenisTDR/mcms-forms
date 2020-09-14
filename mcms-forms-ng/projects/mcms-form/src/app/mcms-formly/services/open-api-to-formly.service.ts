@@ -6,6 +6,7 @@ import * as deepmerge from 'deepmerge';
 import { Validators } from '@angular/forms';
 import clone from 'clone';
 import { FormlyHelpersApiService } from './formly-helpers-api.service';
+import safeEvalFormlyExpression from './safe-eval-formly-expression';
 
 @Injectable()
 export class OpenApiToFormlyService {
@@ -139,7 +140,7 @@ export class OpenApiToFormlyService {
         onInit: field => {
           autoFillConfig = field.templateOptions.autoFill;
 
-          const autoFillValue = this.safeEvalExpression(autoFillConfig.expression, field);
+          const autoFillValue = safeEvalFormlyExpression(autoFillConfig.expression, field);
           autoFillConfig.enabled = field.formControl.value === autoFillValue;
 
           if (autoFillConfig.forceEnableIfSourceChanged) {
@@ -148,7 +149,7 @@ export class OpenApiToFormlyService {
               if (autoFillConfig.enabled) {
                 return;
               }
-              const crt = this.safeEvalExpression(autoFillConfig.expression, field);
+              const crt = safeEvalFormlyExpression(autoFillConfig.expression, field);
               if (crt !== autoFillConfig.tmpAutoFillValue) {
                 autoFillConfig.enabled = true;
               }
@@ -163,7 +164,8 @@ export class OpenApiToFormlyService {
     fieldConfig.expressionProperties = {
       ...fieldConfig.expressionProperties,
     };
-    fieldConfig.expressionProperties[target] = 'field.templateOptions.autoFill.enabled ? (' + autoFillConfig.expression + ') : ' + target;
+    fieldConfig.expressionProperties[target] =
+      'field.templateOptions.autoFill.enabled ? safeEvalFormlyExpression("' + autoFillConfig.expression + '", field) : ' + target;
   }
 
   private buildValidators(prop: IOpenApiProperty, fieldConfig: FormlyFieldConfig): void {
@@ -289,18 +291,4 @@ export class OpenApiToFormlyService {
     }
   }
 
-  // solution stolen from https://stackoverflow.com/a/47445458
-  private safeEvalExpression(expression: string, field: FormlyFieldConfig): any {
-    expression = 'return ' + expression + ';';
-    const safeArguments = {field, model: field.model, formState: field.options.formState, safeMcmsFns: (window as any).safeMcmsFns};
-    const safeArgumentsNames = Object.keys(safeArguments);
-    const globalNames = Object.keys(window);
-    const allArgumentNames = safeArgumentsNames.concat(globalNames);
-
-    const safeArgumentsValues = allArgumentNames.map((key) => {
-      return safeArguments[key];
-    });
-    const evalFn = Function.apply(null, allArgumentNames.concat([expression]));
-    return evalFn.apply({}, safeArgumentsValues);
-  }
 }
