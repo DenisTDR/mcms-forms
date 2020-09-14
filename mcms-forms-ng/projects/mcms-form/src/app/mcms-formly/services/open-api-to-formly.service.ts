@@ -292,7 +292,7 @@ export class OpenApiToFormlyService {
   // solution stolen from https://stackoverflow.com/a/47445458
   private safeEvalExpression(expression: string, field: FormlyFieldConfig): any {
     expression = 'return ' + expression + ';';
-    const safeArguments = {field, model: field.model, formState: field.options.formState};
+    const safeArguments = {field, model: field.model, formState: field.options.formState, safeMcmsFns: (window as any).safeMcmsFns};
     const safeArgumentsNames = Object.keys(safeArguments);
     const globalNames = Object.keys(window);
     const allArgumentNames = safeArgumentsNames.concat(globalNames);
