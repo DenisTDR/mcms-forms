@@ -1,12 +1,18 @@
 @using System.Reflection
 @{
-    var basePath = Environment.GetEnvironmentVariable("MCMS_FORM_SCRIPTS_PATH") is {} path && !string.IsNullOrEmpty(path) ? path : "https://fake-cdn.tdrs.ro/mcms-form/";
+    var pathFromEnv = Environment.GetEnvironmentVariable("MCMS_FORM_SCRIPTS_PATH");
+    var hasPathFromEnv = pathFromEnv is {};
+
+    var basePath = hasPathFromEnv && !string.IsNullOrEmpty(pathFromEnv) ? pathFromEnv : "https://fake-cdn.tdrs.ro/mcms-form/";
     if (basePath.EndsWith("/"))
     {
         basePath = basePath.Substring(0, basePath.Length - 1);
     }
-    var version = GetType().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;;
-    basePath += $"/{version}";
+    if (!hasPathFromEnv)
+    {
+        var version = GetType().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+        basePath += $"/{version}";
+    }
 }
 <script>
     var mcmsFormScripts = {
