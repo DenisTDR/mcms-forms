@@ -8,6 +8,7 @@ import { FormlyFieldCkeditorComponent } from './fields/formly-field-ckeditor/for
 import { FormlyFieldTimeComponent } from './fields/formly-field-time/formly-field-time.component';
 import { FormlyFieldDateTimeComponent } from './fields/formly-field-date-time/formly-field-date-time.component';
 import { FormlyFieldAutocompleteComponent } from './fields/formly-field-autocomplete/formly-field-autocomplete.component';
+import { ClassWrapperComponent } from './wrappers/class-wrapper/class-wrapper.component';
 
 export const formlyModuleConfig: ConfigOption = {
   types: [
@@ -55,6 +56,10 @@ export const formlyModuleConfig: ConfigOption = {
     {
       name: 'card',
       component: CardWrapperComponent,
+    },
+    {
+      name: 'class-wrapper',
+      component: ClassWrapperComponent,
     },
   ],
   // those messages will be set from open api config

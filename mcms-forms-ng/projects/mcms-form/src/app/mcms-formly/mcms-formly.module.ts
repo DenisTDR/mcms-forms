@@ -21,6 +21,7 @@ import { AutosizeModule } from 'ngx-autosize';
 import { NgbDatepickerModule, NgbTimepickerModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { ClassWrapperComponent } from './wrappers/class-wrapper/class-wrapper.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     FormlyFieldDateTimeComponent,
     FormlyFieldAutocompleteComponent,
     CardWrapperComponent,
+    ClassWrapperComponent,
   ],
   imports: [
     CommonModule,

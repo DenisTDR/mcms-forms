@@ -10,7 +10,6 @@ import { FieldWrapper } from '@ngx-formly/core';
       </div>
     </div>
   `,
-  styles: [],
 })
 export class CardWrapperComponent extends FieldWrapper {
 }
