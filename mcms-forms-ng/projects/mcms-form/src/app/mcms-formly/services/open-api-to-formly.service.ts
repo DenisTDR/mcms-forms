@@ -7,6 +7,7 @@ import { Validators } from '@angular/forms';
 import clone from 'clone';
 import { FormlyHelpersApiService } from './formly-helpers-api.service';
 import safeEvalFormlyExpression from './safe-eval-formly-expression';
+import { ExpressionValidatorArgs } from '../validators/expression-validator-args';
 
 @Injectable()
 export class OpenApiToFormlyService {
@@ -173,15 +174,19 @@ export class OpenApiToFormlyService {
       return;
     }
     for (const validator of prop['x-validators']) {
+      if (!fieldConfig.validators) {
+        fieldConfig.validators = {validation: []};
+      }
       if (Validators.hasOwnProperty(validator.name)) {
-        if (!fieldConfig.validators) {
-          fieldConfig.validators = {validation: []};
-        }
         let fValidator = Validators[validator.name];
         if (typeof validator.args !== 'undefined') {
           fValidator = fValidator(validator.args);
         }
         fieldConfig.validators.validation.push(fValidator);
+      }
+      if (validator.name === 'expressionValidator') {
+        this.buildExpressionValidator(validator.args, fieldConfig);
+        validator.name = validator.args.key;
       }
       if (validator.message) {
         if (!fieldConfig.validation) {
@@ -198,6 +203,27 @@ export class OpenApiToFormlyService {
         fieldConfig.templateOptions.pattern = validator.args;
       }
     }
+  }
+
+  private buildExpressionValidator(args: ExpressionValidatorArgs, fieldConfig: FormlyFieldConfig): void {
+    if (!args) {
+      throw new Error('no args provided for Expression Validator');
+    }
+    if (!fieldConfig.expressionProperties) {
+      fieldConfig.expressionProperties = {};
+    }
+    if (!fieldConfig.templateOptions.expressionValidatorResults) {
+      fieldConfig.templateOptions.expressionValidatorResults = {};
+    }
+    fieldConfig.expressionProperties['templateOptions.expressionValidatorResults.' + args.key] = args.expression;
+
+    const asyncValidators = fieldConfig.asyncValidators || {validation: []};
+    if (!asyncValidators.validation) {
+      asyncValidators.validation = [];
+    }
+    asyncValidators.validation.push({name: 'expression-validator', options: {args}});
+
+    fieldConfig.asyncValidators = asyncValidators;
   }
 
   private tryTranslate(msg: string): string {

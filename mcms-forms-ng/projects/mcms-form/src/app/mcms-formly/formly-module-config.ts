@@ -9,6 +9,7 @@ import { FormlyFieldTimeComponent } from './fields/formly-field-time/formly-fiel
 import { FormlyFieldDateTimeComponent } from './fields/formly-field-date-time/formly-field-date-time.component';
 import { FormlyFieldAutocompleteComponent } from './fields/formly-field-autocomplete/formly-field-autocomplete.component';
 import { ClassWrapperComponent } from './wrappers/class-wrapper/class-wrapper.component';
+import { expressionValidator } from './validators/expression-validator';
 
 export const formlyModuleConfig: ConfigOption = {
   types: [
@@ -60,6 +61,12 @@ export const formlyModuleConfig: ConfigOption = {
     {
       name: 'class-wrapper',
       component: ClassWrapperComponent,
+    },
+  ],
+  validators: [
+    {
+      name: 'expression-validator',
+      validation: expressionValidator,
     },
   ],
   // those messages will be set from open api config

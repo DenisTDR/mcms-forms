@@ -30,7 +30,12 @@ export class CustomDateAdapter extends NgbDateAdapter<string> {
   }
 
   public toModel(date: NgbDateStruct | null): string | null {
-    return date ? date.year + this.DELIMITER + date.month + this.DELIMITER + date.day : null;
+    if (date) {
+      const day = (date.day < 10 ? '0' : '') + date.day;
+      const month = (date.month < 10 ? '0' : '') + date.month;
+      return date.year + this.DELIMITER + month + this.DELIMITER + day;
+    }
+    return null;
   }
 
   public placeholderProject(value: string): string {
