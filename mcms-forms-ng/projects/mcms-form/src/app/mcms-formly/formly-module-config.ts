@@ -10,6 +10,7 @@ import { FormlyFieldDateTimeComponent } from './fields/formly-field-date-time/fo
 import { FormlyFieldAutocompleteComponent } from './fields/formly-field-autocomplete/formly-field-autocomplete.component';
 import { ClassWrapperComponent } from './wrappers/class-wrapper/class-wrapper.component';
 import { expressionValidator } from './validators/expression-validator';
+import { FormlyFieldCustomNumberComponent } from './fields/formly-field-custom-number/formly-field-custom-number.component';
 
 export const formlyModuleConfig: ConfigOption = {
   types: [
@@ -50,6 +51,11 @@ export const formlyModuleConfig: ConfigOption = {
     {
       name: 'autocomplete',
       component: FormlyFieldAutocompleteComponent,
+      wrappers: ['form-field'],
+    },
+    {
+      name: 'custom-number',
+      component: FormlyFieldCustomNumberComponent,
       wrappers: ['form-field'],
     },
   ],

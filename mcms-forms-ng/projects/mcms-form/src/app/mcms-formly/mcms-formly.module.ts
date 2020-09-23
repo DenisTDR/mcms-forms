@@ -22,6 +22,7 @@ import { NgbDatepickerModule, NgbTimepickerModule, NgbTypeaheadModule } from '@n
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ClassWrapperComponent } from './wrappers/class-wrapper/class-wrapper.component';
+import { FormlyFieldCustomNumberComponent } from './fields/formly-field-custom-number/formly-field-custom-number.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ClassWrapperComponent } from './wrappers/class-wrapper/class-wrapper.co
     FormlyFieldTimeComponent,
     FormlyFieldDateTimeComponent,
     FormlyFieldAutocompleteComponent,
+    FormlyFieldCustomNumberComponent,
     CardWrapperComponent,
     ClassWrapperComponent,
   ],
