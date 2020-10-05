@@ -180,6 +180,9 @@ export class OpenApiToFormlyService {
       if (Validators.hasOwnProperty(validator.name)) {
         let fValidator = Validators[validator.name];
         if (typeof validator.args !== 'undefined') {
+          if (validator.name === 'pattern' && typeof validator.args === 'string') {
+            validator.args = new RegExp(validator.args, 'u');
+          }
           fValidator = fValidator(validator.args);
         }
         fieldConfig.validators.validation.push(fValidator);
@@ -290,9 +293,23 @@ export class OpenApiToFormlyService {
   }
 
 
-  public async getConfig(schemaName: string): Promise<any[]> {
+  public async getConfig(schemaName: string): Promise<FormlyFieldConfig[]> {
     await this.ensureOpenApiConfigLoaded();
-    return clone(await this.getOrCreateSchema(schemaName));
+    const fields = await this.getOrCreateSchema(schemaName);
+    const cloned = clone(fields);
+
+    // fix cloned RegExp flags in templateOptions.pattern
+    for (let i = 0; i < fields.length; i++) {
+      const field = fields[i];
+      if (!field || !field.templateOptions || !field.templateOptions.pattern || typeof field.templateOptions.pattern === 'string') {
+        continue;
+      }
+      if ((field.templateOptions.pattern as RegExp).flags !== (cloned[i].templateOptions.pattern as RegExp).flags) {
+        cloned[i].templateOptions.pattern = new RegExp(field.templateOptions.pattern, (field.templateOptions.pattern as RegExp).flags);
+      }
+    }
+
+    return cloned;
   }
 
   public clearCache(): void {

@@ -1,6 +1,6 @@
 {
   "name": "mcms-forms",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "scripts": {
     "ng": "ng",
     "start": "npm run start:mcms-forms",
@@ -9,7 +9,8 @@
     "lint": "ng lint --fix",
     "build:form": "npm run bundle:form",
     "bundle:form": "ng build --project mcms-form --prod --output-hashing none --single-bundle true --plugin ~build-file-names.plugin.js",
-    "copy:form": "cpr dist/mcms-form/main.js dist/mcms-form/mcms-form.bundle.js -o"
+    "copy:form": "cpr dist/mcms-form/main.js dist/mcms-form/mcms-form.bundle.js -o",
+    "deploy": "bash deploy.sh"
   },
   "private": true,
   "dependencies": {
