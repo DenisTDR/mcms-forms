@@ -297,19 +297,25 @@ export class OpenApiToFormlyService {
     await this.ensureOpenApiConfigLoaded();
     const fields = await this.getOrCreateSchema(schemaName);
     const cloned = clone(fields);
+    this.fixClonedPatterns(cloned);
+    return cloned;
+  }
 
+  private fixClonedPatterns(cloned: FormlyFieldConfig[]): void {
     // fix cloned RegExp flags in templateOptions.pattern
-    for (let i = 0; i < fields.length; i++) {
-      const field = fields[i];
-      if (!field || !field.templateOptions || !field.templateOptions.pattern || typeof field.templateOptions.pattern === 'string') {
+    for (const field of cloned) {
+      if (field.fieldGroup) {
+        this.fixClonedPatterns(field.fieldGroup);
+      }
+      if (!field || !field.templateOptions || !field.templateOptions.pattern) {
         continue;
       }
-      if ((field.templateOptions.pattern as RegExp).flags !== (cloned[i].templateOptions.pattern as RegExp).flags) {
-        cloned[i].templateOptions.pattern = new RegExp(field.templateOptions.pattern, (field.templateOptions.pattern as RegExp).flags);
+      if (typeof field.templateOptions.pattern === 'string') {
+        field.templateOptions.pattern = new RegExp(field.templateOptions.pattern, 'u');
+      } else if (field.templateOptions.pattern instanceof RegExp) {
+        field.templateOptions.pattern = new RegExp(field.templateOptions.pattern, 'u');
       }
     }
-
-    return cloned;
   }
 
   public clearCache(): void {
