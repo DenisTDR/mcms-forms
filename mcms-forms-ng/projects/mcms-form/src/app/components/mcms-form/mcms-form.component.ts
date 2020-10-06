@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { FormlyFieldConfig } from '@ngx-formly/core';
+import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { FormlyFormManager } from '../../mcms-formly/formly-form-manager';
 import { McmsFormState } from './mcms-form-state';
 import clone from 'clone';
@@ -19,7 +19,7 @@ import { environment } from '../../../environments/environment';
     }
   `],
 })
-export class McmsFormComponent implements OnInit, AfterViewInit {
+export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Output()
   public done: EventEmitter<any> = new EventEmitter<any>();
@@ -29,6 +29,8 @@ export class McmsFormComponent implements OnInit, AfterViewInit {
   @Input() public additionalFields: any;
   @Input() public options: any;
 
+
+  public formOptions: FormlyFormOptions;
 
   public isDebug: boolean;
   public state: McmsFormState;
@@ -66,6 +68,19 @@ export class McmsFormComponent implements OnInit, AfterViewInit {
     }
   }
 
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes.options) {
+      this.buildFormOptions();
+    }
+  }
+
+  private buildFormOptions(): void {
+    if (!this.formOptions) {
+      this.formOptions = {};
+    }
+    this.formOptions.formState = Object.assign({}, this.formOptions.formState, this.options && this.options.formState);
+  }
+
   public ngOnInit(): void {
     this.load().then();
   }
@@ -83,6 +98,7 @@ export class McmsFormComponent implements OnInit, AfterViewInit {
     if (this.additionalFields) {
       Object.assign(this.model, this.additionalFields);
     }
+    this.buildFormOptions();
 
     if (this.isDebug) {
       this.fieldsClone = clone(this.fields);
@@ -122,4 +138,5 @@ export class McmsFormComponent implements OnInit, AfterViewInit {
       this.viewInit = true;
     });
   }
+
 }

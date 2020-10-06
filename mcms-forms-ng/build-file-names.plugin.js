@@ -3,10 +3,7 @@ exports.default = {
   pre: function () {
   },
   config: function (cfg) {
-    var time = new Date().getTime();
-    // var pattern = 'getting-started.[name].' + time + '.js';
-    var pattern = 'mcms-form.[name].js';
-    cfg.output.filename = pattern;
+    cfg.output.filename = 'mcms-form.[name].js';
     return cfg;
   },
   post: function () {
