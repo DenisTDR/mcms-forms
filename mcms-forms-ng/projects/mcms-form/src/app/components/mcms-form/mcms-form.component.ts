@@ -78,7 +78,8 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
     if (!this.formOptions) {
       this.formOptions = {};
     }
-    this.formOptions.formState = Object.assign({}, this.formOptions.formState, this.options && this.options.formState);
+    this.formOptions.formState = Object.assign({},
+      this.formOptions.formState, {parentModel: this.model}, this.options && this.options.formState);
   }
 
   public ngOnInit(): void {
