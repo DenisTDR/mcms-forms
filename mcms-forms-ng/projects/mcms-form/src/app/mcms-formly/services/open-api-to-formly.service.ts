@@ -136,9 +136,10 @@ export class OpenApiToFormlyService {
 
   private buildAutoFill(fieldConfig: FormlyFieldConfig): void {
     let autoFillConfig = fieldConfig.templateOptions.autoFill;
-    if (autoFillConfig.onlyIfUntouched && autoFillConfig.checkIfTouchedOnInit) {
-      fieldConfig.hooks = {
-        onInit: field => {
+    // TODO: this code needs documentation
+    fieldConfig.hooks = {
+      onInit: field => {
+        if (autoFillConfig.onlyIfUntouched && autoFillConfig.checkIfTouchedOnInit) {
           autoFillConfig = field.templateOptions.autoFill;
 
           const autoFillValue = safeEvalFormlyExpression(autoFillConfig.expression, field);
@@ -156,17 +157,28 @@ export class OpenApiToFormlyService {
               }
             });
           }
-        },
-      };
-    }
-
-    const target = 'model.' + fieldConfig.key;
+        }
+        field.form.valueChanges.subscribe(value => {
+          if (!autoFillConfig.enabled || autoFillConfig.enableExpressionResult === false) {
+            return;
+          }
+          const nowValue = safeEvalFormlyExpression(autoFillConfig.expression, field);
+          if (autoFillConfig.lastAutoFillValue !== nowValue) {
+            if (nowValue !== field.formControl.value) {
+              field.formControl.setValue(nowValue);
+            }
+          }
+          autoFillConfig.lastAutoFillValue = nowValue;
+        });
+      },
+    };
 
     fieldConfig.expressionProperties = {
       ...fieldConfig.expressionProperties,
     };
-    fieldConfig.expressionProperties[target] =
-      'field.templateOptions.autoFill.enabled ? safeEvalFormlyExpression("' + autoFillConfig.expression + '", field) : ' + target;
+    if (autoFillConfig.enableExpression) {
+      fieldConfig.expressionProperties['templateOptions.autoFill.enableExpressionResult'] = autoFillConfig.enableExpression;
+    }
   }
 
   private buildValidators(prop: IOpenApiProperty, fieldConfig: FormlyFieldConfig): void {
