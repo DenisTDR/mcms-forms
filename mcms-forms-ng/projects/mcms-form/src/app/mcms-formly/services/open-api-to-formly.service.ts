@@ -158,17 +158,25 @@ export class OpenApiToFormlyService {
             });
           }
         }
+
+        if (autoFillConfig.enableExpression) {
+          autoFillConfig.enableExpressionResult = safeEvalFormlyExpression(autoFillConfig.enableExpression, field);
+          if (autoFillConfig.enableExpressionResult) {
+            field.formControl.setValue(safeEvalFormlyExpression(autoFillConfig.expression, field));
+          }
+        }
+
         field.form.valueChanges.subscribe(value => {
           if (!autoFillConfig.enabled || autoFillConfig.enableExpressionResult === false) {
             return;
           }
           const nowValue = safeEvalFormlyExpression(autoFillConfig.expression, field);
           if (autoFillConfig.lastAutoFillValue !== nowValue) {
+            autoFillConfig.lastAutoFillValue = nowValue;
             if (nowValue !== field.formControl.value) {
               field.formControl.setValue(nowValue);
             }
           }
-          autoFillConfig.lastAutoFillValue = nowValue;
         });
       },
     };
