@@ -1,21 +1,21 @@
-@using System.Reflection
+@using MCMS.Forms
 @{
-    var pathFromEnv = Environment.GetEnvironmentVariable("MCMS_FORM_SCRIPTS_PATH");
+    var pathFromEnv = Environment.GetEnvironmentVariable("MCMS_FORM_STATIC_FILES_PATH");
     var hasPathFromEnv = pathFromEnv is {};
 
-    var basePath = hasPathFromEnv && !string.IsNullOrEmpty(pathFromEnv) ? pathFromEnv : "https://fake-cdn.tdrs.ro/mcms-form/";
+    var basePath = hasPathFromEnv && !string.IsNullOrEmpty(pathFromEnv) ? pathFromEnv : "/mcms-forms-files/";
     if (basePath.EndsWith("/"))
     {
         basePath = basePath.Substring(0, basePath.Length - 1);
     }
     if (!hasPathFromEnv)
     {
-        var version = GetType().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+        var version = AssemblyVersionHelper.Version;
         basePath += $"/{version}";
     }
 }
 <script>
-    var mcmsFormScripts = {
+    var mcmsFormsStaticFiles = {
         load: function () {
             if (this.loaded) { return; }
             this.loaded = true;
