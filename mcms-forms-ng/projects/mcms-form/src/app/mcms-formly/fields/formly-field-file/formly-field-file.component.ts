@@ -219,7 +219,6 @@ export class FormlyFieldFileComponent extends FieldType implements OnInit {
         if (error && error.error && typeof error.error.error === 'string') {
           fileToUpload.errorReason = error.error.error;
         }
-        console.log(error);
         this.updateValueAndState();
       });
   }

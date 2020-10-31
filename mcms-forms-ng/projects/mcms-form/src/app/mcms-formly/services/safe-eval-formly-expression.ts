@@ -6,7 +6,7 @@ function safeEvalFormlyExpression(expression: string, field: FormlyFieldConfig):
   const safeMcmsFns = (window as any).safeMcmsFns || (window.parent as any).safeMcmsFns;
   const safeArguments = {field, model: field.model, formState: field.options.formState, safeMcmsFns};
   const safeArgumentsNames = Object.keys(safeArguments);
-  const globalNames = Object.keys(window);
+  const globalNames = Object.keys(window).filter(gn => gn.indexOf('-') !== -1);
   const allArgumentNames = safeArgumentsNames.concat(globalNames);
 
   const safeArgumentsValues = allArgumentNames.map((key) => {
