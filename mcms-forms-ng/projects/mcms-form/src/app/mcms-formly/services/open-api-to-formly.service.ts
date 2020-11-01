@@ -41,6 +41,7 @@ export class OpenApiToFormlyService {
     'minLength', 'maxLength', ['minimum', 'min'], ['maximum', 'max'],
   ];
 
+  public basePath: string;
 
   constructor(
     private openApiConfigService: OpenApiConfigService,
@@ -350,7 +351,11 @@ export class OpenApiToFormlyService {
     }
     const customFieldConfig = fieldConfig.templateOptions.customFieldConfig;
     if (customFieldConfig.optionsUrl) {
-      fieldConfig.templateOptions.options = await this.formlyHelpersApi.get<any[]>(customFieldConfig.optionsUrl).toPromise();
+      const url = new URL(customFieldConfig.optionsUrl);
+      if (typeof this.basePath !== 'undefined') {
+        url.pathname = this.basePath + url.pathname;
+      }
+      fieldConfig.templateOptions.options = await this.formlyHelpersApi.get<any[]>(url.toString()).toPromise();
       fieldConfig.templateOptions.valueProp = o => o;
       fieldConfig.templateOptions.labelProp = customFieldConfig.labelProp;
       if (customFieldConfig.valueProp) {

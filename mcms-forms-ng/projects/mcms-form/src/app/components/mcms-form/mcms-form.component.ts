@@ -49,14 +49,10 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
     return this.action === 'patch';
   }
 
-
-  private openApiToFormlyService: OpenApiToFormlyService;
-
   constructor(
-    openApiToFormlyService: OpenApiToFormlyService,
+    private openApiToFormlyService: OpenApiToFormlyService,
     private api: ApiService,
   ) {
-    this.openApiToFormlyService = openApiToFormlyService;
     this.formManager = new FormlyFormManager(this, openApiToFormlyService, api);
     this.formManager.stateChanged.subscribe(state => {
       this.state = state;
@@ -92,7 +88,7 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
 
   public async load(): Promise<void> {
     this.fields = null;
-    const loadedData = await this.formManager.load();
+    const loadedData = await this.formManager.load(this.options.basePath);
     this.fields = loadedData.fields;
     this.model = clone(loadedData.model);
 
@@ -125,7 +121,7 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
       }
     } catch (e) {
       console.error(e);
-      let msg = 'An error occurred, check de dev console';
+      let msg = 'An error occurred, check de dev (browser) web console.';
       if (e && e.error && e.error.error) {
         msg = e.error.error;
       }

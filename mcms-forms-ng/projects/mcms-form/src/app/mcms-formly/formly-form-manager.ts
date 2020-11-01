@@ -33,8 +33,6 @@ export class FormlyFormManager {
     return this.component.form;
   }
 
-  // McmsFormState
-
   constructor(
     private component: McmsFormComponent,
     private openApiToFormlyService: OpenApiToFormlyService,
@@ -47,9 +45,9 @@ export class FormlyFormManager {
 
   private stateChangedSubject: Subject<McmsFormState> = new Subject<McmsFormState>();
 
-
-  public async load(): Promise<{ model: any, fields: FormlyFieldConfig[] }> {
+  public async load(basePath?: string): Promise<{ model: any, fields: FormlyFieldConfig[] }> {
     this.state = 'form-loading';
+    this.openApiToFormlyService.basePath = basePath;
     const fields = await this.openApiToFormlyService.getConfig(this.component.schemaName);
     const model = await this.api.get();
     this.initialModel = clone(model);
