@@ -11,7 +11,7 @@ namespace MCMS.Forms
                 new ManifestEmbeddedFileProvider(typeof(MCMSFormsAppBuilderExtensions).Assembly, "resources/mcms-forms-files");
 
             app.UseStaticFiles(new StaticFileOptions
-                {FileProvider = filesProvider, RequestPath = $"/mcms-forms-files/{AssemblyVersionHelper.Version}"});
+                {FileProvider = filesProvider, RequestPath = $"/mcms-forms-files/{MCMSFormsHelper.Version}"});
         }
     }
 }
