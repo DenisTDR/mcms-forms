@@ -8,6 +8,7 @@ import clone from 'clone';
 import { FormlyHelpersApiService } from './formly-helpers-api.service';
 import safeEvalFormlyExpression from './safe-eval-formly-expression';
 import { ExpressionValidatorArgs } from '../validators/expression-validator-args';
+import { FormlyFileFieldConfig } from '../fields/formly-field-file/formly-file-field-models';
 
 @Injectable()
 export class OpenApiToFormlyService {
@@ -126,6 +127,9 @@ export class OpenApiToFormlyService {
         fieldGroup: await this.getOrCreateSchema(this.getSchemaNameFromRef(prop.items?.$ref)),
         ...fieldConfig.fieldArray,
       };
+    }
+    if (fieldConfig.type === 'file' && fieldConfig.templateOptions.customFieldConfig) {
+      this.patchFileFieldLinksConfig(fieldConfig);
     }
 
     if (fieldConfig.type === 'select' || fieldConfig.type === 'autocomplete') {
@@ -351,11 +355,8 @@ export class OpenApiToFormlyService {
     }
     const customFieldConfig = fieldConfig.templateOptions.customFieldConfig;
     if (customFieldConfig.optionsUrl) {
-      const url = new URL(customFieldConfig.optionsUrl);
-      if (typeof this.basePath !== 'undefined') {
-        url.pathname = this.basePath + url.pathname;
-      }
-      fieldConfig.templateOptions.options = await this.formlyHelpersApi.get<any[]>(url.toString()).toPromise();
+      const url = this.urlWithBasePath(customFieldConfig.optionsUrl);
+      fieldConfig.templateOptions.options = await this.formlyHelpersApi.get<any[]>(url).toPromise();
       fieldConfig.templateOptions.valueProp = o => o;
       fieldConfig.templateOptions.labelProp = customFieldConfig.labelProp;
       if (customFieldConfig.valueProp) {
@@ -365,4 +366,24 @@ export class OpenApiToFormlyService {
     }
   }
 
+  private urlWithBasePath(urlStr: string): string {
+    if (typeof this.basePath === 'undefined' || !this.basePath) {
+      return urlStr;
+    }
+    try {
+      const url = new URL(urlStr);
+      url.pathname = this.basePath + url.pathname;
+      return url.toString();
+    } catch (e) {
+      // fallback
+      console.error(e);
+      return urlStr;
+    }
+  }
+
+  private patchFileFieldLinksConfig(fieldConfig: FormlyFieldConfig): void {
+    const fileConfig = fieldConfig.templateOptions.customFieldConfig as FormlyFileFieldConfig;
+    fileConfig.uploadUrl = this.urlWithBasePath(fileConfig.uploadUrl);
+    fileConfig.deleteUrl = this.urlWithBasePath(fileConfig.deleteUrl);
+  }
 }
