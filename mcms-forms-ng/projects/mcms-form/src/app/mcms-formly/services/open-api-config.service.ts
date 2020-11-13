@@ -3,14 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { ConnectableObservable, Observable } from 'rxjs';
 import { publishReplay, tap } from 'rxjs/operators';
 import { IOpenApiDocument } from '../models/open-api-models';
-import { FormlyConfig } from '@ngx-formly/core';
+import { TranslateService } from './translate.service';
 
 @Injectable()
 export class OpenApiConfigService {
 
   constructor(
     private http: HttpClient,
-    private formlyConfig: FormlyConfig,
+    private trans: TranslateService,
   ) {
   }
 
@@ -27,35 +27,16 @@ export class OpenApiConfigService {
   }
 
   private buildObservable(): void {
-    const requestOptions = {headers: {'X-LANG': this.getLang() || ''}};
+    const requestOptions = {headers: {'X-LANG': this.trans.getLang() || ''}};
     const obs: ConnectableObservable<IOpenApiDocument> =
       this.http.get<IOpenApiDocument>(this.endpointUrl, requestOptions).pipe(tap(doc => {
-        this.registerValidationMessages(doc);
+        this.trans.doc = doc;
+        this.trans.registerValidationMessages();
       })).pipe(publishReplay()) as ConnectableObservable<IOpenApiDocument>;
     obs.connect();
     this.observable = obs;
   }
 
-  private registerValidationMessages(doc: IOpenApiDocument): void {
-    const trans = this.getTranslationsDict(doc);
-    if (trans) {
-      for (const key of Object.keys(trans)) {
-        this.formlyConfig.addValidatorMessage(key, trans[key]);
-      }
-    }
-  }
-
-  public getTranslationsDict(doc: IOpenApiDocument): { [key: string]: string } {
-    const lang = this.getLang() || doc.translations.defaultLanguage;
-    if (!doc || !doc.translations || !doc.translations.translations) {
-      return {};
-    }
-    return doc.translations.translations[lang] || {};
-  }
-
-  private getLang(): string {
-    return localStorage.getItem('ui-lang');
-  }
 
   public clearCache(): void {
     this.observable = null;

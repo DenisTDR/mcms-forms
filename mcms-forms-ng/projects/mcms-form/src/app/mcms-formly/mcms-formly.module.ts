@@ -23,6 +23,8 @@ import { NgxFileDropModule } from 'ngx-file-drop';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ClassWrapperComponent } from './wrappers/class-wrapper/class-wrapper.component';
 import { FormlyFieldCustomNumberComponent } from './fields/formly-field-custom-number/formly-field-custom-number.component';
+import { TranslateService } from './services/translate.service';
+import { FormlyTextComponent } from './fields/formly-text/formly-text.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,7 @@ import { FormlyFieldCustomNumberComponent } from './fields/formly-field-custom-n
     FormlyFieldCustomNumberComponent,
     CardWrapperComponent,
     ClassWrapperComponent,
+    FormlyTextComponent,
   ],
   imports: [
     CommonModule,
@@ -56,6 +59,7 @@ import { FormlyFieldCustomNumberComponent } from './fields/formly-field-custom-n
     OpenApiConfigService,
     OpenApiToFormlyService,
     FormlyHelpersApiService,
+    TranslateService,
   ],
   exports: [
     FormlyModule,
@@ -68,6 +72,7 @@ export class McmsFormlyModule {
       providers: [
         OpenApiConfigService,
         OpenApiToFormlyService,
+        TranslateService,
       ],
     };
   }

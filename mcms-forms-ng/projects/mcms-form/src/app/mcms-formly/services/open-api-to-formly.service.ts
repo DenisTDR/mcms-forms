@@ -9,6 +9,7 @@ import { FormlyHelpersApiService } from './formly-helpers-api.service';
 import safeEvalFormlyExpression from './safe-eval-formly-expression';
 import { ExpressionValidatorArgs } from '../validators/expression-validator-args';
 import { FormlyFileFieldConfig } from '../fields/formly-field-file/formly-file-field-models';
+import { TranslateService } from './translate.service';
 
 @Injectable()
 export class OpenApiToFormlyService {
@@ -47,6 +48,7 @@ export class OpenApiToFormlyService {
   constructor(
     private openApiConfigService: OpenApiConfigService,
     private formlyHelpersApi: FormlyHelpersApiService,
+    private trans: TranslateService,
   ) {
   }
 
@@ -135,13 +137,14 @@ export class OpenApiToFormlyService {
     if (fieldConfig.type === 'select' || fieldConfig.type === 'autocomplete') {
       await this.patchCustomOptionsConfig(fieldConfig);
     }
+    this.trans.translate(fieldConfig);
     this.buildValidators(prop, fieldConfig);
     return fieldConfig;
   }
 
   private buildAutoFill(fieldConfig: FormlyFieldConfig): void {
     let autoFillConfig = fieldConfig.templateOptions.autoFill;
-    // TODO: this code needs documentation
+    // TODO: this code needs documentation because idk why it's working :))
     fieldConfig.hooks = {
       onInit: field => {
         if (autoFillConfig.onlyIfUntouched && autoFillConfig.checkIfTouchedOnInit) {
@@ -222,7 +225,7 @@ export class OpenApiToFormlyService {
         } else if (!fieldConfig.validation.messages) {
           fieldConfig.validation.messages = {};
         }
-        fieldConfig.validation.messages[validator.name] = this.tryTranslate(validator.message);
+        fieldConfig.validation.messages[validator.name] = this.trans.tryTranslate(validator.message);
       }
       if (validator.name === 'required') {
         fieldConfig.templateOptions.required = true;
@@ -254,10 +257,6 @@ export class OpenApiToFormlyService {
     fieldConfig.asyncValidators = asyncValidators;
   }
 
-  private tryTranslate(msg: string): string {
-    const trans = this.openApiConfigService.getTranslationsDict(this.openApiDoc);
-    return trans.hasOwnProperty(msg) ? trans[msg] : msg;
-  }
 
   private copyNeededFields(prop: IOpenApiProperty, fieldConfig: FormlyFieldConfig): void {
     const setIfNotUndefined: (target, propName, value) => void = (target, propName, value) => {
