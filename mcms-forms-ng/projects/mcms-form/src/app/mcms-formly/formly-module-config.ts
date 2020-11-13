@@ -11,6 +11,7 @@ import { FormlyFieldAutocompleteComponent } from './fields/formly-field-autocomp
 import { ClassWrapperComponent } from './wrappers/class-wrapper/class-wrapper.component';
 import { expressionValidator } from './validators/expression-validator';
 import { FormlyFieldCustomNumberComponent } from './fields/formly-field-custom-number/formly-field-custom-number.component';
+import { FormlyTextComponent } from './fields/formly-text/formly-text.component';
 
 export const formlyModuleConfig: ConfigOption = {
   types: [
@@ -57,6 +58,10 @@ export const formlyModuleConfig: ConfigOption = {
       name: 'custom-number',
       component: FormlyFieldCustomNumberComponent,
       wrappers: ['form-field'],
+    },
+    {
+      name: 'text',
+      component: FormlyTextComponent,
     },
   ],
   wrappers: [
