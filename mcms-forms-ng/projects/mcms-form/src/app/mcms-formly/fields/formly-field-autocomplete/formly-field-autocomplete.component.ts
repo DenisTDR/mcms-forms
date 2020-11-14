@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { merge, Observable, Subject } from 'rxjs';
 import { FieldType } from '@ngx-formly/core';
-import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -17,6 +17,7 @@ import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
     [editable]='false'
     [formlyAttributes]="field"
     [class.is-invalid]="showError"
+    (blur)="onBlur()"
     container="body"
     #instance="ngbTypeahead"/>
   `,
@@ -30,6 +31,8 @@ export class FormlyFieldAutocompleteComponent extends FieldType implements OnIni
     super();
     this.buildSearchFn();
   }
+
+  private lastSearchModel: string;
 
   @ViewChild('instance', {static: true}) public instance: NgbTypeahead;
   public searchFn: (text: Observable<string>) => Observable<readonly any[]>;
@@ -61,9 +64,18 @@ export class FormlyFieldAutocompleteComponent extends FieldType implements OnIni
       const inputFocus$ = this.focus$;
 
       return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
+        tap(v => {
+          this.lastSearchModel = v;
+        }),
         map(term => (term === '' ? this.getOptions
           : this.getOptions.filter(v => this.searchableFormatter(v).toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 25))
       );
     };
+  }
+
+  public onBlur(): void {
+    if (this.lastSearchModel && !this.formControl.value && this.formControl.valid) {
+      this.formControl.setErrors({'required-from-list': true});
+    }
   }
 }
