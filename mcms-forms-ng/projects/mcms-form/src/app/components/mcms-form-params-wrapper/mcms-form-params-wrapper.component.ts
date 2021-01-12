@@ -41,9 +41,16 @@ export class McmsFormParamsWrapperComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    const openApiConfigUrl = (window as any).openApiConfigUrl;
+    if (typeof this.options === 'string' && this.options[0] === '{') {
+      try {
+        this.optionsParsed = JSON.parse(this.options);
+      } catch (e) {
+      }
+    }
+
+    const openApiConfigUrl = (this.optionsParsed && this.optionsParsed.openApiConfigUrl) || (window as any).openApiConfigUrl;
     if (!openApiConfigUrl) {
-      throw new Error('\'openApiConfigUrl\' should be set as a \'window\' property.');
+      throw new Error('\'openApiConfigUrl\' should be passed via \'options\' or should be set as a \'window\' property.');
     }
     this.openApiConfigService.setEndpointUrl(openApiConfigUrl);
     this.api.submitUrl = this.submitUrl;
@@ -52,12 +59,6 @@ export class McmsFormParamsWrapperComponent implements OnInit {
     if (this.additionalFields && this.additionalFields[0] === '{') {
       try {
         this.additionalFieldsParsed = JSON.parse(this.additionalFields);
-      } catch (e) {
-      }
-    }
-    if (this.options && this.options[0] === '{') {
-      try {
-        this.optionsParsed = JSON.parse(this.options);
       } catch (e) {
       }
     }
