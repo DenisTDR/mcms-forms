@@ -35,6 +35,10 @@ export class FormlyFieldArrayComponent extends FieldArrayType implements OnInit 
     return this.to.customFieldConfig;
   }
 
+  constructor() {
+    super(null);
+  }
+
   public ngOnInit(): void {
     if (!this.to.customFieldConfig) {
       this.to.customFieldConfig = {};
