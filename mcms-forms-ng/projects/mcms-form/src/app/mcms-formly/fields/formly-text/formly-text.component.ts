@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FieldType } from '@ngx-formly/core';
 
 @Component({
-  selector: 'app-formly-text',
+  selector: 'mcms-text',
   template: `
     <div *ngIf="to.label" [innerHTML]="to.label" class="title"></div>
     <div *ngIf="to.description" [innerHTML]="to.description"></div>

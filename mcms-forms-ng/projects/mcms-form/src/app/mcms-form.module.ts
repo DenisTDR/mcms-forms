@@ -10,12 +10,14 @@ import { McmsFormlyModule } from './mcms-formly/mcms-formly.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ApiService } from './services/api.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { McmsFormDebugComponent } from './components/mcms-form-debug/mcms-form-debug.component';
 
 @NgModule({
   declarations: [
     McmsFormComponent,
     McmsFormParamsWrapperComponent,
     McmsFormQueryWrapperComponent,
+    McmsFormDebugComponent,
   ],
   imports: [
     BrowserModule,

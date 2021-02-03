@@ -3,7 +3,7 @@ import * as BalloonEditorMcms from '@mcms-cs/ckeditor5-build-balloon';
 import { FieldType } from '@ngx-formly/core';
 
 @Component({
-  selector: 'app-formly-field-ckeditor',
+  selector: 'mcms-field-ckeditor',
   templateUrl: './formly-field-ckeditor.component.html',
   styleUrls: ['./formly-field-ckeditor.component.scss'],
 })

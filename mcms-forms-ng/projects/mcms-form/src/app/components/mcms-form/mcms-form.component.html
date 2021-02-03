@@ -31,19 +31,8 @@
 
 
 <div class="row" *ngIf="viewInit && isDebug">
-  <div class="col-6">
-    fieldsClone
-    <pre>{{fieldsClone | json}}</pre>
-  </div>
-  <div class="col-6">
-    <div>
-      form.valid: {{form.valid}}
-    </div>
-    model:
-    <pre>{{model | json}}</pre>
-    <div>
-      formState
-      <pre>{{formOptions.formState | json}}</pre>
-    </div>
-  </div>
+  <mcms-form-debug [fields]="fieldsClone"
+                   [valid]="form.valid"
+                   [model]="model"
+                   [formState]="formOptions.formState"></mcms-form-debug>
 </div>

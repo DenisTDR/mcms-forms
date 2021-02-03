@@ -2,9 +2,11 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { FieldType } from '@ngx-formly/core';
 import { Subject } from 'rxjs';
 import { startWith, takeUntil, tap } from 'rxjs/operators';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
-  selector: 'formly-field-input',
+  selector: 'mcms-field-custom-number',
   template: `
     <input #input
            type="text"
@@ -15,8 +17,7 @@ import { startWith, takeUntil, tap } from 'rxjs/operators';
     />
   `,
 })
-export class FormlyFieldCustomNumberComponent extends FieldType implements OnInit, OnDestroy {
-  private onDestroy$ = new Subject<void>();
+export class FormlyFieldCustomNumberComponent extends FieldType implements OnInit {
 
   @ViewChild('input')
   private input: ElementRef<HTMLInputElement>;
@@ -74,7 +75,7 @@ export class FormlyFieldCustomNumberComponent extends FieldType implements OnIni
     }
 
     this.formControl.valueChanges.pipe(
-      takeUntil(this.onDestroy$),
+      untilDestroyed(this),
       startWith(this.formControl.value as string),
       tap((value) => {
         if (!value) {
@@ -118,10 +119,5 @@ export class FormlyFieldCustomNumberComponent extends FieldType implements OnIni
         return newValue;
       }),
     ).subscribe();
-  }
-
-  public ngOnDestroy(): void {
-    this.onDestroy$.next();
-    this.onDestroy$.complete();
   }
 }

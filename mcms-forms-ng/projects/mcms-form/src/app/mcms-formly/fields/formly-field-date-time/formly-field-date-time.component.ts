@@ -6,9 +6,11 @@ import { CustomDateAdapter } from '../formly-field-date/custom-date-adapter.serv
 import { CustomDateParserFormatter } from '../formly-field-date/custom-date-parser.formatter';
 import { CustomTimeAdapter } from '../formly-field-time/custom-time-adapter';
 import { Subscription } from 'rxjs';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
-  selector: 'app-formly-field-date-time',
+  selector: 'mcms-field-date-time',
   templateUrl: './formly-field-date-time.component.html',
   styleUrls: ['./formly-field-date-time.component.scss'],
   providers: [
@@ -19,11 +21,10 @@ import { Subscription } from 'rxjs';
     {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter},
   ],
 })
-export class FormlyFieldDateTimeComponent extends FieldType implements OnInit, OnDestroy {
+export class FormlyFieldDateTimeComponent extends FieldType implements OnInit {
   public timeFormControl: FormControl = new FormControl();
   public dateFormControl: FormControl = new FormControl();
 
-  private subscriptions: Subscription[];
 
   constructor(
     private dateAdapter: CustomDateAdapter,
@@ -33,17 +34,15 @@ export class FormlyFieldDateTimeComponent extends FieldType implements OnInit, O
   }
 
   public ngOnInit(): void {
-    this.subscriptions = [
-      this.formControl.valueChanges.subscribe(value => {
-        this.propagateForward();
-      }),
-      this.timeFormControl.valueChanges.subscribe(value => {
-        this.propagateBackward();
-      }),
-      this.dateFormControl.valueChanges.subscribe(value => {
-        this.propagateBackward();
-      }),
-    ];
+    this.formControl.valueChanges.pipe(untilDestroyed(this)).subscribe(value => {
+      this.propagateForward();
+    });
+    this.timeFormControl.valueChanges.pipe(untilDestroyed(this)).subscribe(value => {
+      this.propagateBackward();
+    });
+    this.dateFormControl.valueChanges.pipe(untilDestroyed(this)).subscribe(value => {
+      this.propagateBackward();
+    });
     this.propagateForward();
   }
 
@@ -67,14 +66,6 @@ export class FormlyFieldDateTimeComponent extends FieldType implements OnInit, O
     const value = [this.dateFormControl.value, this.timeFormControl.value].filter(v => v).join('T');
     if (this.formControl.value !== value) {
       this.formControl.setValue(value);
-    }
-  }
-
-  public ngOnDestroy(): void {
-    if (this.subscriptions) {
-      for (const subscription of this.subscriptions) {
-        subscription.unsubscribe();
-      }
     }
   }
 }

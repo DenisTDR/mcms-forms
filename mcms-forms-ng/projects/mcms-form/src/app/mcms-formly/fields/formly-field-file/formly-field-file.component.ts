@@ -5,9 +5,11 @@ import { FormlyFileFieldConfig, FormlyFileFieldState, ProcessedFile } from './fo
 import { Subject } from 'rxjs';
 import clone from 'clone';
 import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
-  selector: 'app-formly-field-file',
+  selector: 'mcms-field-file',
   templateUrl: './formly-field-file.component.html',
   styleUrls: ['./formly-field-file.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -148,7 +150,7 @@ export class FormlyFieldFileComponent extends FieldType implements OnInit {
     this.state = 'empty';
     this.customFieldConfig.stateChanged = this.stateSubject.asObservable();
     this.customFieldConfig.uploadTrigger = new EventEmitter<any>();
-    this.customFieldConfig.uploadTrigger.subscribe(() => {
+    this.customFieldConfig.uploadTrigger.pipe(untilDestroyed(this)).subscribe(() => {
       this.doUpload();
     });
     this.loadInitialValue();

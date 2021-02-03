@@ -10,6 +10,7 @@ import safeEvalFormlyExpression from './safe-eval-formly-expression';
 import { ExpressionValidatorArgs } from '../validators/expression-validator-args';
 import { FormlyFileFieldConfig } from '../fields/formly-field-file/formly-file-field-models';
 import { TranslateService } from './translate.service';
+import OpenApiConfigHelper from './open-api-config-helper';
 
 @Injectable()
 export class OpenApiToFormlyService {
@@ -43,13 +44,14 @@ export class OpenApiToFormlyService {
     'minLength', 'maxLength', ['minimum', 'min'], ['maximum', 'max'],
   ];
 
-  public basePath: string;
+  public helper: OpenApiConfigHelper;
 
   constructor(
     private openApiConfigService: OpenApiConfigService,
     private formlyHelpersApi: FormlyHelpersApiService,
     private trans: TranslateService,
   ) {
+    this.helper = new OpenApiConfigHelper(formlyHelpersApi);
   }
 
   private async getOrCreateSchema(schemaName: string): Promise<FormlyFieldConfig[]> {
@@ -134,11 +136,11 @@ export class OpenApiToFormlyService {
       this.patchFileFieldLinksConfig(fieldConfig);
     }
 
-    if (fieldConfig.type === 'select' || fieldConfig.type === 'autocomplete') {
-      await this.patchCustomOptionsConfig(fieldConfig);
-    }
+    await this.helper.patchCustomOptionsConfig(fieldConfig);
     this.trans.translate(fieldConfig);
     this.buildValidators(prop, fieldConfig);
+    await this.helper.patchDynamicFieldConfig(fieldConfig);
+
     return fieldConfig;
   }
 
@@ -219,6 +221,9 @@ export class OpenApiToFormlyService {
         this.buildExpressionValidator(validator.args, fieldConfig);
         validator.name = validator.args.key;
       }
+      if (validator.name === 'required-from-list') {
+        this.addValidation(fieldConfig, 'required-from-list');
+      }
       if (validator.message) {
         if (!fieldConfig.validation) {
           fieldConfig.validation = {messages: {}};
@@ -257,6 +262,9 @@ export class OpenApiToFormlyService {
     fieldConfig.asyncValidators = asyncValidators;
   }
 
+  private addValidation(fieldConfig: FormlyFieldConfig, name: string): void {
+    fieldConfig.validators.validation.push(name);
+  }
 
   private copyNeededFields(prop: IOpenApiProperty, fieldConfig: FormlyFieldConfig): void {
     const setIfNotUndefined: (target, propName, value) => void = (target, propName, value) => {
@@ -276,6 +284,10 @@ export class OpenApiToFormlyService {
     if (xProps) {
       for (const propKey in xProps) {
         if (!xProps.hasOwnProperty(propKey)) {
+          continue;
+        }
+        if (propKey === 'clone-key') {
+          fieldConfig.key = xProps[propKey];
           continue;
         }
         let targetObj = fieldConfig;
@@ -348,41 +360,10 @@ export class OpenApiToFormlyService {
     this.openApiDoc = null;
   }
 
-  private async patchCustomOptionsConfig(fieldConfig: FormlyFieldConfig): Promise<void> {
-    if (!fieldConfig || !fieldConfig.templateOptions || !fieldConfig.templateOptions.customFieldConfig) {
-      return;
-    }
-    const customFieldConfig = fieldConfig.templateOptions.customFieldConfig;
-    if (customFieldConfig.optionsUrl) {
-      const url = this.urlWithBasePath(customFieldConfig.optionsUrl);
-      fieldConfig.templateOptions.options = await this.formlyHelpersApi.get<any[]>(url).toPromise();
-      fieldConfig.templateOptions.valueProp = o => o;
-      fieldConfig.templateOptions.labelProp = customFieldConfig.labelProp;
-      if (customFieldConfig.valueProp) {
-        fieldConfig.templateOptions.compareWith = (o1, o2) => o1 === o2 ||
-          (o1 && o2 && o1[customFieldConfig.valueProp] === o2[customFieldConfig.valueProp]);
-      }
-    }
-  }
-
-  private urlWithBasePath(urlStr: string): string {
-    if (typeof this.basePath === 'undefined' || !this.basePath) {
-      return urlStr;
-    }
-    try {
-      const url = new URL(urlStr);
-      url.pathname = this.basePath + url.pathname;
-      return url.toString();
-    } catch (e) {
-      // fallback
-      console.error(e);
-      return urlStr;
-    }
-  }
 
   private patchFileFieldLinksConfig(fieldConfig: FormlyFieldConfig): void {
     const fileConfig = fieldConfig.templateOptions.customFieldConfig as FormlyFileFieldConfig;
-    fileConfig.uploadUrl = this.urlWithBasePath(fileConfig.uploadUrl);
-    fileConfig.deleteUrl = this.urlWithBasePath(fileConfig.deleteUrl);
+    fileConfig.uploadUrl = this.helper.urlWithBasePath(fileConfig.uploadUrl);
+    fileConfig.deleteUrl = this.helper.urlWithBasePath(fileConfig.deleteUrl);
   }
 }

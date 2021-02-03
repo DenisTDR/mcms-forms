@@ -7,7 +7,9 @@ import clone from 'clone';
 import { OpenApiToFormlyService } from '../../mcms-formly/services/open-api-to-formly.service';
 import { ApiService } from '../../services/api.service';
 import { environment } from '../../../environments/environment';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'mcms-form',
   templateUrl: './mcms-form.component.html',
@@ -54,14 +56,11 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
     private api: ApiService,
   ) {
     this.formManager = new FormlyFormManager(this, openApiToFormlyService, api);
-    this.formManager.stateChanged.subscribe(state => {
+    this.formManager.stateChanged.pipe(untilDestroyed(this)).subscribe(state => {
       this.state = state;
     });
 
     this.isDebug = window.location.href.indexOf('debug=true') !== -1 || !environment.production;
-    if (this.isDebug) {
-      (window as any).form = this;
-    }
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -91,15 +90,16 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
     const loadedData = await this.formManager.load(this.options.basePath);
     this.fields = loadedData.fields;
     this.model = clone(loadedData.model);
-
+    if (this.isDebug) {
+      this.fieldsClone = clone(this.fields);
+      // console.log(this.fieldsClone);
+    }
     if (this.additionalFields) {
       Object.assign(this.model, this.additionalFields);
     }
     this.buildFormOptions();
 
-    if (this.isDebug) {
-      this.fieldsClone = clone(this.fields);
-    }
+
   }
 
   public async submit(): Promise<void> {

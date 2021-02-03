@@ -18,28 +18,57 @@ import { FormlyFieldDateComponent } from './fields/formly-field-date/formly-fiel
 import { CardWrapperComponent } from './wrappers/card-wrapper/card-wrapper.component';
 import { FormlyFieldArrayComponent } from './fields/formly-field-array/formly-field-array.component';
 import { AutosizeModule } from 'ngx-autosize';
-import { NgbDatepickerModule, NgbTimepickerModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbAccordionModule,
+  NgbButtonsModule,
+  NgbDatepickerModule,
+  NgbTimepickerModule,
+  NgbTypeaheadModule
+} from '@ng-bootstrap/ng-bootstrap';
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ClassWrapperComponent } from './wrappers/class-wrapper/class-wrapper.component';
 import { FormlyFieldCustomNumberComponent } from './fields/formly-field-custom-number/formly-field-custom-number.component';
 import { TranslateService } from './services/translate.service';
 import { FormlyTextComponent } from './fields/formly-text/formly-text.component';
+import { AccordionWrapperComponent } from './wrappers/accordion-wrapper/accordion-wrapper.component';
+import { FieldFillButtonComponent } from './wrappers/field-fill-button/field-fill-button.component';
+import { WrapperHeaderActionsComponent } from './wrappers/wrapper-header-actions/wrapper-header-actions.component';
+
+const usedNgbModules = [
+  NgbDatepickerModule,
+  NgbTimepickerModule,
+  NgbTypeaheadModule,
+  NgxFileDropModule,
+  NgbButtonsModule,
+  NgbAccordionModule,
+];
+
+const fields = [
+  FormlyFieldArrayComponent,
+  FormlyFieldTextareaComponent,
+  FormlyFieldDateComponent,
+  FormlyFieldFileComponent,
+  FormlyFieldCkeditorComponent,
+  FormlyFieldTimeComponent,
+  FormlyFieldDateTimeComponent,
+  FormlyFieldAutocompleteComponent,
+  FormlyFieldCustomNumberComponent,
+];
+
+const wrappers = [
+  CardWrapperComponent,
+  ClassWrapperComponent,
+  AccordionWrapperComponent,
+];
 
 @NgModule({
   declarations: [
-    FormlyFieldArrayComponent,
-    FormlyFieldTextareaComponent,
-    FormlyFieldDateComponent,
-    FormlyFieldFileComponent,
-    FormlyFieldCkeditorComponent,
-    FormlyFieldTimeComponent,
-    FormlyFieldDateTimeComponent,
-    FormlyFieldAutocompleteComponent,
-    FormlyFieldCustomNumberComponent,
-    CardWrapperComponent,
-    ClassWrapperComponent,
     FormlyTextComponent,
+    ...fields,
+    ...wrappers,
+    FieldFillButtonComponent,
+    WrapperHeaderActionsComponent,
   ],
   imports: [
     CommonModule,
@@ -49,11 +78,8 @@ import { FormlyTextComponent } from './fields/formly-text/formly-text.component'
     FormlyModule.forRoot(formlyModuleConfig),
     FormlyBootstrapModule,
     AutosizeModule,
-    NgbDatepickerModule,
-    NgbTimepickerModule,
-    NgbTypeaheadModule,
-    NgxFileDropModule,
     CKEditorModule,
+    ...usedNgbModules,
   ],
   providers: [
     OpenApiConfigService,

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FieldArrayType } from '@ngx-formly/core';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
-  selector: 'app-formly-field-array',
+  selector: 'mcms-field-array',
   template: `
     <div *ngFor="let subField of field.fieldGroup; let i = index">
       <div class="d-flex align-items-center"
@@ -48,7 +50,7 @@ export class FormlyFieldArrayComponent extends FieldArrayType implements OnInit 
       this.forceAdjustToMinLength();
     }
 
-    this.form.valueChanges.subscribe(ceva => {
+    this.form.valueChanges.pipe(untilDestroyed(this)).subscribe(_ => {
       if (this.lastMinLength !== this.minLength) {
         this.forceAdjustToMinLength();
       }

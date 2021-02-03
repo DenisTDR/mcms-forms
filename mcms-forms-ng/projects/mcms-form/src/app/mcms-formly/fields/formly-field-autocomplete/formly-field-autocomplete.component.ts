@@ -5,7 +5,7 @@ import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/opera
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-formly-field-autocomplete',
+  selector: 'mcms-field-autocomplete',
   template: `<input
     type="text" class="form-control"
     [formControl]="formControl"
@@ -14,7 +14,7 @@ import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
     [resultFormatter]="displayFormatter"
     (focus)="focus$.next($any($event).target.value)"
     (click)="click$.next($any($event).target.value)"
-    [editable]='false'
+    [editable]='!requiredFromList'
     [formlyAttributes]="field"
     [class.is-invalid]="showError"
     (blur)="onBlur()"
@@ -42,6 +42,12 @@ export class FormlyFieldAutocompleteComponent extends FieldType implements OnIni
   public displayFormatter: (item: any) => string;
   public searchableFormatter: (item: any) => string;
 
+  public maxLength = 25;
+
+  public get requiredFromList(): boolean {
+    return this.to.requiredFromList;
+  }
+
   public ngOnInit(): void {
     const labelProp = this.to.labelProp || 'name';
     if (typeof labelProp === 'string') {
@@ -67,15 +73,17 @@ export class FormlyFieldAutocompleteComponent extends FieldType implements OnIni
         tap(v => {
           this.lastSearchModel = v;
         }),
-        map(term => (term === '' ? this.getOptions
-          : this.getOptions.filter(v => this.searchableFormatter(v).toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 25))
+        map(term => (
+          term === '' ? this.getOptions
+            : this.getOptions.filter(v => this.searchableFormatter(v).toLowerCase().indexOf(term.toLowerCase()) > -1))
+          .slice(0, this.maxLength))
       );
     };
   }
 
   public onBlur(): void {
-    if (this.lastSearchModel && !this.formControl.value && this.formControl.valid) {
-      this.formControl.setErrors({'required-from-list': true});
+    if (this.requiredFromList && this.lastSearchModel && !this.formControl.value) {
+      this.formControl.setErrors({'required-from-list': true, ...this.formControl.errors});
     }
   }
 }

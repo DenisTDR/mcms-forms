@@ -47,7 +47,7 @@ export class FormlyFormManager {
 
   public async load(basePath?: string): Promise<{ model: any, fields: FormlyFieldConfig[] }> {
     this.state = 'form-loading';
-    this.openApiToFormlyService.basePath = basePath;
+    this.openApiToFormlyService.helper.basePath = basePath;
     const fields = await this.openApiToFormlyService.getConfig(this.component.schemaName);
     const model = await this.api.get();
     this.initialModel = clone(model);
@@ -75,11 +75,6 @@ export class FormlyFormManager {
       alert('form not valid. please check the fields');
       return;
     }
-
-    // if (this.form.valid) {
-    //   console.log('is valid?');
-    //   return;
-    // }
 
     this.state = 'saving';
     try {
@@ -115,11 +110,9 @@ export class FormlyFormManager {
       return pendingFileFieldsConfigs.every(ffc => ffc.state !== 'uploading');
     };
 
-    return new Promise((resolve, reject) => {
-
-
+    return new Promise((resolve) => {
       for (const fileFieldConfig of pendingFileFieldsConfigs) {
-        fileFieldConfig.stateChanged.subscribe(state => {
+        fileFieldConfig.stateChanged.subscribe(_ => {
           if (allDone()) {
             resolve();
           }
@@ -154,7 +147,9 @@ export class FormlyFormManager {
   // tslint:disable-next-line:member-ordering
   private static stateOfFileField(fileField: FormlyFieldConfig): FormlyFileFieldState {
     return (fileField.templateOptions.customFieldConfig as FormlyFileFieldConfig).state;
-  }  // tslint:disable-next-line:member-ordering
+  }
+
+  // tslint:disable-next-line:member-ordering
   private static fileConfig(fileField: FormlyFieldConfig): FormlyFileFieldConfig {
     return fileField.templateOptions.customFieldConfig;
   }

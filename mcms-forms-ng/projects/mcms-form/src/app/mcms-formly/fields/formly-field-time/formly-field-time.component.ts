@@ -4,7 +4,7 @@ import { NgbTimeAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { FieldType } from '@ngx-formly/core';
 
 @Component({
-  selector: 'app-formly-field-time',
+  selector: 'mcms-field-time',
   template: `<ngb-timepicker [formControl]="formControl" [meridian]="true" [spinners]="false"></ngb-timepicker>`,
   providers: [
     CustomTimeAdapter,

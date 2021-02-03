@@ -12,6 +12,8 @@ import { ClassWrapperComponent } from './wrappers/class-wrapper/class-wrapper.co
 import { expressionValidator } from './validators/expression-validator';
 import { FormlyFieldCustomNumberComponent } from './fields/formly-field-custom-number/formly-field-custom-number.component';
 import { FormlyTextComponent } from './fields/formly-text/formly-text.component';
+import requiredFromListValidator from './validators/required-from-list-validator';
+import { AccordionWrapperComponent } from './wrappers/accordion-wrapper/accordion-wrapper.component';
 
 export const formlyModuleConfig: ConfigOption = {
   types: [
@@ -63,6 +65,10 @@ export const formlyModuleConfig: ConfigOption = {
       name: 'text',
       component: FormlyTextComponent,
     },
+    // {
+    //   name: 'dynamic',
+    //   component: FormlyFieldDynamicComponent,
+    // },
   ],
   wrappers: [
     {
@@ -73,11 +79,27 @@ export const formlyModuleConfig: ConfigOption = {
       name: 'class-wrapper',
       component: ClassWrapperComponent,
     },
+    // {
+    //   name: 'dynamic-type-card',
+    //   component: DynamicTypeCardWrapperComponent,
+    // },
+    {
+      name: 'accordion',
+      component: AccordionWrapperComponent,
+    },
+    // {
+    //   name: 'dynamic-type-accordion',
+    //   component: DynamicTypeAccordionWrapperComponent,
+    // },
   ],
   validators: [
     {
       name: 'expression-validator',
       validation: expressionValidator,
+    },
+    {
+      name: 'required-from-list',
+      validation: requiredFromListValidator,
     },
   ],
   // those messages will be set from open api config

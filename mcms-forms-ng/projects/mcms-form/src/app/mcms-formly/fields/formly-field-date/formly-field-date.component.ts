@@ -5,7 +5,7 @@ import { CustomDateAdapter } from './custom-date-adapter.service';
 import { CustomDateParserFormatter } from './custom-date-parser.formatter';
 
 @Component({
-  selector: 'app-formly-field-date',
+  selector: 'mcms-field-date',
   template: `
     <input
       [formControl]="formControl"

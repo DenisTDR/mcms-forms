@@ -1,11 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import '~bootstrap/scss/bootstrap';
+//the bootstrap css is imported in index.html
+//@import '~bootstrap/scss/bootstrap';
 
-.full-width {
-  width: 100%;
-}
 
-formly-wrapper-form-field {
-  width: 100%;
-}
+@import "projects/mcms-form/src/styles";
