@@ -18,8 +18,7 @@ export default class OpenApiConfigHelper {
     }
     const customFieldConfig = fieldConfig.templateOptions.customFieldConfig;
     if (customFieldConfig.optionsUrl) {
-      const url = this.urlWithBasePath(customFieldConfig.optionsUrl);
-      fieldConfig.templateOptions.options = await this.formlyHelpersApi.get<any[]>(url).toPromise();
+      await this.loadOptions(fieldConfig);
       fieldConfig.templateOptions.valueProp = o => o;
       fieldConfig.templateOptions.labelProp = customFieldConfig.labelProp;
       if (customFieldConfig.valueProp) {
@@ -27,6 +26,13 @@ export default class OpenApiConfigHelper {
           (o1 && o2 && o1[customFieldConfig.valueProp] === o2[customFieldConfig.valueProp]);
       }
     }
+  }
+
+  public async loadOptions(fieldConfig: FormlyFieldConfig, clearCache?: boolean): Promise<void> {
+    const url = fieldConfig.templateOptions.customFieldConfig.fullOptionsUrl
+      || this.urlWithBasePath(fieldConfig.templateOptions.customFieldConfig.optionsUrl);
+    fieldConfig.templateOptions.customFieldConfig.fullOptionsUrl = url;
+    fieldConfig.templateOptions.options = await this.formlyHelpersApi.getCaching<any[]>(url, 0, clearCache).toPromise();
   }
 
   public patchDynamicFieldConfig(fieldConfig: FormlyFieldConfig): void {

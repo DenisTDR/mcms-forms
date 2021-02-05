@@ -12,4 +12,4 @@ fi
 
 key="$1"
 
-dotnet nuget push MCMS.Forms.1.3.6.nupkg --api-key "$key" --source https://api.nuget.org/v3/index.json
+dotnet nuget push MCMS.Forms.1.3.7.nupkg --api-key "$key" --source https://api.nuget.org/v3/index.json

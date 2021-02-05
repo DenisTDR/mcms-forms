@@ -98,8 +98,10 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
       Object.assign(this.model, this.additionalFields);
     }
     this.buildFormOptions();
+  }
 
-
+  public async reloadPage(): Promise<void> {
+    window.location.reload();
   }
 
   public async submit(): Promise<void> {
@@ -122,7 +124,7 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
     } catch (e) {
       console.error(e);
       let msg = 'An error occurred, check de dev (browser) web console.';
-      if (e && e.error && e.error.error) {
+      if (e?.error?.error) {
         msg = e.error.error;
       }
       alert(msg);

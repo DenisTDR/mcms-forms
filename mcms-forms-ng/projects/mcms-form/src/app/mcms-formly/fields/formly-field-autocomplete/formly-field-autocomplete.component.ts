@@ -3,6 +3,8 @@ import { merge, Observable, Subject } from 'rxjs';
 import { FieldType } from '@ngx-formly/core';
 import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
+import { FormlyHelpersApiService } from '../../services/formly-helpers-api.service';
+import OpenApiConfigHelper from '../../services/open-api-config-helper';
 
 @Component({
   selector: 'mcms-field-autocomplete',
@@ -20,14 +22,44 @@ import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
     (blur)="onBlur()"
     container="body"
     #instance="ngbTypeahead"/>
+  <button class="btn btn-link text-info reload-btn" type="button"
+          *ngIf="to.customFieldConfig?.showReloadButton"
+          [hidden]="forceReloadButtonHidden"
+          (click)="forceReloadOptions()"><i class="fas fa-sync"></i></button>
   `,
+  styles: [
+    `
+      :host {
+        display: block;
+        position: relative;
+      }
+
+      .reload-btn {
+        position: absolute;
+        right: 0;
+        top: 0;
+        opacity: .2;
+        transition: opacity .25s;
+      }
+
+      :host:hover .reload-btn {
+        opacity: .5;
+      }
+
+      :host:hover .reload-btn:hover {
+        opacity: .8;
+      }
+    `,
+  ],
 })
 export class FormlyFieldAutocompleteComponent extends FieldType implements OnInit {
   private get getOptions(): any[] {
     return this.to.options as any[];
   }
 
-  constructor() {
+  constructor(
+    private has: FormlyHelpersApiService,
+  ) {
     super();
     this.buildSearchFn();
   }
@@ -43,6 +75,8 @@ export class FormlyFieldAutocompleteComponent extends FieldType implements OnIni
   public searchableFormatter: (item: any) => string;
 
   public maxLength = 25;
+
+  public forceReloadButtonHidden: boolean;
 
   public get requiredFromList(): boolean {
     return this.to.requiredFromList;
@@ -60,6 +94,14 @@ export class FormlyFieldAutocompleteComponent extends FieldType implements OnIni
       this.searchableFormatter = (option: any) => option[searchProp];
     } else {
       this.searchableFormatter = searchProp;
+    }
+
+    if (this.to.customFieldConfig?.reloadOptionsOnInit) {
+      new OpenApiConfigHelper(this.has).loadOptions(this.field).then();
+      this.forceReloadButtonHidden = true;
+      setTimeout(() => {
+        this.forceReloadButtonHidden = false;
+      }, 5000);
     }
   }
 
@@ -85,5 +127,13 @@ export class FormlyFieldAutocompleteComponent extends FieldType implements OnIni
     if (this.requiredFromList && this.lastSearchModel && !this.formControl.value) {
       this.formControl.setErrors({'required-from-list': true, ...this.formControl.errors});
     }
+  }
+
+  public forceReloadOptions(): void {
+    new OpenApiConfigHelper(this.has).loadOptions(this.field, true).then();
+    this.forceReloadButtonHidden = true;
+    setTimeout(() => {
+      this.forceReloadButtonHidden = false;
+    }, 5000);
   }
 }
