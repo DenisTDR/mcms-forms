@@ -77,7 +77,7 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
       }
     });
 
-    // this.isDebug = window.location.href.indexOf('debug=true') !== -1 || !environment.production;
+    this.isDebug = window.location.href.indexOf('debug=true') !== -1 || !environment.production;
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
