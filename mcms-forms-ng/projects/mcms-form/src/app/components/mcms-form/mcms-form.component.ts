@@ -1,4 +1,15 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { FormlyFormManager } from '../../mcms-formly/formly-form-manager';
@@ -31,6 +42,9 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() public additionalFields: any;
   @Input() public options: any;
 
+  @ViewChild('spinnerContainer', {read: ElementRef})
+  public spinnerContainer: ElementRef;
+
 
   public formOptions: FormlyFormOptions;
 
@@ -58,9 +72,12 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
     this.formManager = new FormlyFormManager(this, openApiToFormlyService, api);
     this.formManager.stateChanged.pipe(untilDestroyed(this)).subscribe(state => {
       this.state = state;
+      if (state === 'saving') {
+        this.spinnerContainer.nativeElement.scrollIntoView({behavior: 'smooth'});
+      }
     });
 
-    this.isDebug = window.location.href.indexOf('debug=true') !== -1 || !environment.production;
+    // this.isDebug = window.location.href.indexOf('debug=true') !== -1 || !environment.production;
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
