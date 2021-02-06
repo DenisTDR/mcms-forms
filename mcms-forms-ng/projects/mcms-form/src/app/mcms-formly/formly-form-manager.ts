@@ -55,7 +55,7 @@ export class FormlyFormManager {
     return {model, fields};
   }
 
-  public async submit(model: any): Promise<{ model: any }> {
+  public async submit(model: any): Promise<{ model: any, skipEmitDone?: boolean }> {
     if (this.state !== 'ready') {
       alert('Form not submittable!');
       return;

@@ -19,6 +19,7 @@ import { OpenApiToFormlyService } from '../../mcms-formly/services/open-api-to-f
 import { ApiService } from '../../services/api.service';
 import { environment } from '../../../environments/environment';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import scrollIntoView from 'scroll-into-view-if-needed';
 
 @UntilDestroy()
 @Component({
@@ -73,7 +74,7 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
     this.formManager.stateChanged.pipe(untilDestroyed(this)).subscribe(state => {
       this.state = state;
       if (state === 'saving') {
-        this.spinnerContainer.nativeElement.scrollIntoView({behavior: 'smooth'});
+        scrollIntoView(this.spinnerContainer?.nativeElement, {behavior: 'smooth'});
       }
     });
 
@@ -127,15 +128,16 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
       return;
     }
     try {
-      if (this.options && this.options.skipApiRequest) {
+      if (this.options?.skipApiRequest) {
         this.done.emit({model: this.model});
       } else {
         const result = await this.formManager.submit(this.model);
         if (result) {
           if (result.model) {
             this.model = result.model;
+          } else if (!result.skipEmitDone) {
+            this.done.emit(result);
           }
-          this.done.emit(result);
         }
       }
     } catch (e) {
