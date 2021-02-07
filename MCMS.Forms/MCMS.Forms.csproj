@@ -4,7 +4,7 @@
         <RootNamespace>MCMS.Forms</RootNamespace>
         <AssemblyName>MCMS.Forms</AssemblyName>
         <PackageId>MCMS.Forms</PackageId>
-        <Version>1.4.0-nightly-12</Version>
+        <Version>1.4.0-nightly-13</Version>
         <Authors>TDR</Authors>
         <Company>TDR</Company>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
