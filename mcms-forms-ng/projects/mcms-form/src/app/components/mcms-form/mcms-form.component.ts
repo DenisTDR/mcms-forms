@@ -20,6 +20,8 @@ import { ApiService } from '../../services/api.service';
 import { environment } from '../../../environments/environment';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import scrollIntoView from 'scroll-into-view-if-needed';
+import { MessagesService } from '../../mcms-formly/services/messages.service';
+import { debounceTime } from 'rxjs/operators';
 
 @UntilDestroy()
 @Component({
@@ -37,6 +39,8 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Output()
   public done: EventEmitter<any> = new EventEmitter<any>();
+  @Output()
+  public customEvent: EventEmitter<{ type: string, data: any }> = new EventEmitter<any>();
 
   @Input() public schemaName: string;
   @Input() public action: string;
@@ -69,13 +73,22 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
   constructor(
     private openApiToFormlyService: OpenApiToFormlyService,
     private api: ApiService,
+    private messages: MessagesService,
   ) {
-    this.formManager = new FormlyFormManager(this, openApiToFormlyService, api);
+    this.formManager = new FormlyFormManager(this, openApiToFormlyService, api, messages);
     this.formManager.stateChanged.pipe(untilDestroyed(this)).subscribe(state => {
       this.state = state;
       if (state === 'saving') {
-        scrollIntoView(this.spinnerContainer?.nativeElement, {behavior: 'smooth'});
+        setTimeout(() => {
+          if (state === 'saving') {
+            scrollIntoView(this.spinnerContainer?.nativeElement, {behavior: 'smooth'});
+          }
+        }, 100);
       }
+    });
+
+    this.form.valueChanges.pipe(untilDestroyed(this), debounceTime(500)).subscribe(value => {
+      this.customEvent.emit({type: 'form-updated', data: {value, status: this.form.status}});
     });
 
     this.isDebug = window.location.href.indexOf('debug=true') !== -1 || !environment.production;
@@ -124,7 +137,7 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
 
   public async submit(): Promise<void> {
     if (this.state !== 'ready') {
-      alert('Form not submittable!');
+      this.messages.alert('Form not submittable!');
       return;
     }
     try {
@@ -135,8 +148,15 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
         if (result) {
           if (result.model) {
             this.model = result.model;
-          } else if (!result.skipEmitDone) {
+          }
+          if (!result.skipEmitDone) {
             this.done.emit(result);
+          }
+          if (result.snack) {
+            this.customEvent.emit({
+              type: 'snack',
+              data: {text: result.snack, type: result.snackType, duration: result.snackDuration || 4000},
+            });
           }
         }
       }
@@ -146,7 +166,7 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
       if (e?.error?.error) {
         msg = e.error.error;
       }
-      alert(msg);
+      this.messages.alert(msg);
       this.formManager.state = 'ready';
     }
   }

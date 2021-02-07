@@ -66,7 +66,7 @@ export class FieldFillButtonComponent {
       key: 'fillValue',
       templateOptions: {...this.field.templateOptions, disabled: false},
     }];
-    this.modalService.open(content).result.then((result) => {
+    this.modalService.open(content, {centered: true}).result.then((result) => {
       if (result !== 'save' || !this.model.fillValue) {
         return;
       }
@@ -76,6 +76,7 @@ export class FieldFillButtonComponent {
       }
       this.field.formControl.patchValue(valToFill);
       this.field.model[this.cc.valueProp] = this.model.fillValue[this.cc.valueProp];
+    }).catch(_ => {
     });
   }
 }

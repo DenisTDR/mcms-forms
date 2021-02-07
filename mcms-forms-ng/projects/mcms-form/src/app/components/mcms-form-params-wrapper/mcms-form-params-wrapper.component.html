@@ -10,5 +10,6 @@
     [additionalFields]="additionalFieldsParsed"
     [options]="optionsParsed"
     (done)="onDone($event)"
+    (customEvent)="customEvent.emit($event)"
   ></mcms-form>
 </ng-container>

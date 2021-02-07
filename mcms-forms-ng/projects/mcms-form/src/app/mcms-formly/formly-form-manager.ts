@@ -7,9 +7,10 @@ import { compare } from 'fast-json-patch';
 import clone from 'clone';
 import { FormlyFileFieldConfig, FormlyFileFieldState } from './fields/formly-field-file/formly-file-field-models';
 import { HttpResponse } from '@angular/common/http';
-import { ModelResponse } from './models/model-response';
+import { FormSubmitResponse } from './models/form-submit-response';
 import { McmsFormState } from '../components/mcms-form/mcms-form-state';
 import { McmsFormComponent } from '../components/mcms-form/mcms-form.component';
+import { MessagesService } from './services/messages.service';
 
 export class FormlyFormManager {
   get state(): McmsFormState {
@@ -37,6 +38,7 @@ export class FormlyFormManager {
     private component: McmsFormComponent,
     private openApiToFormlyService: OpenApiToFormlyService,
     private api: ApiService,
+    private messages: MessagesService,
   ) {
   }
 
@@ -55,9 +57,9 @@ export class FormlyFormManager {
     return {model, fields};
   }
 
-  public async submit(model: any): Promise<{ model: any, skipEmitDone?: boolean }> {
+  public async submit(model: any): Promise<FormSubmitResponse> {
     if (this.state !== 'ready') {
-      alert('Form not submittable!');
+      this.messages.alert('You can\'t do this right now.');
       return;
     }
     if (this.hasAnyUploadingFileFields()) {
@@ -72,23 +74,23 @@ export class FormlyFormManager {
     }
     if (!this.form.valid) {
       this.form.markAllAsTouched();
-      alert('form not valid. please check the fields');
+      this.messages.alert('There are some invalid fields, please check them.');
       return;
     }
 
     this.state = 'saving';
     try {
-      let apiResult: HttpResponse<ModelResponse>;
+      let apiResult: HttpResponse<FormSubmitResponse>;
       if (!this.isPatch) {
-        apiResult = await this.api.create<ModelResponse>(model);
+        apiResult = await this.api.create<FormSubmitResponse>(model);
       } else {
         const patchDoc = compare(this.initialModel, model);
         if (!patchDoc.length) {
-          alert('Nothing to save...');
+          this.messages.alert('There is nothing new to save.');
           this.state = 'ready';
           return;
         } else {
-          apiResult = await this.api.patch<ModelResponse>(patchDoc);
+          apiResult = await this.api.patch<FormSubmitResponse>(patchDoc);
         }
       }
       if (apiResult.body && apiResult.body.model) {

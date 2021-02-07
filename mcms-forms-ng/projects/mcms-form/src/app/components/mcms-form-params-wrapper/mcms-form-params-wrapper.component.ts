@@ -14,6 +14,8 @@ export class McmsFormParamsWrapperComponent implements OnInit {
 
   @Output()
   public done: EventEmitter<any> = new EventEmitter<any>();
+  @Output()
+  public customEvent: EventEmitter<{ type: string, data: any }> = new EventEmitter<any>();
 
   @Input() public schemaName: string;
   @Input() public modelId: string;

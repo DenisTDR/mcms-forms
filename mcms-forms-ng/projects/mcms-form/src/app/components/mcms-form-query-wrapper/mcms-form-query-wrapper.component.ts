@@ -41,7 +41,12 @@ export class McmsFormQueryWrapperComponent implements OnInit {
   }
 
   public jobDone($event): void {
-    window.top.postMessage({id: 'mcms-form-done', senderId: this.paramsObj.formInstanceId, data: $event}, '*');
+    window.top.postMessage({type: 'mcms-form-done', senderId: this.paramsObj.formInstanceId, data: $event}, '*');
+  }
+
+  public customEvent($event): void {
+    $event.senderId = this.paramsObj.formInstanceId;
+    window.top.postMessage($event, '*');
   }
 
   private initResizeEvents(): void {
@@ -50,7 +55,7 @@ export class McmsFormQueryWrapperComponent implements OnInit {
         const {height} = entry.contentRect;
         window.top.postMessage({
             height,
-            id: 'mcms-form-height-changed',
+            type: 'mcms-form-height-changed',
             message: 'I changed my height.',
             senderId: this.paramsObj.formInstanceId,
           }, '*',

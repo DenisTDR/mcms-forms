@@ -32,8 +32,10 @@ import { FormlyFieldCustomNumberComponent } from './fields/formly-field-custom-n
 import { TranslateService } from './services/translate.service';
 import { FormlyTextComponent } from './fields/formly-text/formly-text.component';
 import { AccordionWrapperComponent } from './wrappers/accordion-wrapper/accordion-wrapper.component';
-import { FieldFillButtonComponent } from './wrappers/field-fill-button/field-fill-button.component';
-import { WrapperHeaderActionsComponent } from './wrappers/wrapper-header-actions/wrapper-header-actions.component';
+import { FieldFillButtonComponent } from './components/field-fill-button/field-fill-button.component';
+import { WrapperHeaderActionsComponent } from './components/wrapper-header-actions/wrapper-header-actions.component';
+import { AlertModalComponent } from './components/alert-modal/alert-modal.component';
+import { MessagesService } from './services/messages.service';
 
 const usedNgbModules = [
   NgbDatepickerModule,
@@ -69,6 +71,7 @@ const wrappers = [
     ...wrappers,
     FieldFillButtonComponent,
     WrapperHeaderActionsComponent,
+    AlertModalComponent,
   ],
   imports: [
     CommonModule,
@@ -86,6 +89,7 @@ const wrappers = [
     OpenApiToFormlyService,
     FormlyHelpersApiService,
     TranslateService,
+    MessagesService,
   ],
   exports: [
     FormlyModule,
