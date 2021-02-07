@@ -20,7 +20,7 @@ echo "deploying to tdrs fake cdn..."
 
 sed "s/{{version}}/$version/g" ../../cdn-index.html > ./index.html || exit
 
-tar -czf ../mcms-form.tgz ./index.html ./*.css.map 3rdpartylicenses.txt || exit
+tar -czf ../mcms-form.tgz ./index.html 3rdpartylicenses.txt || exit
 
 targetPath=/var/www/tdrs.ro/fake-cdn
 

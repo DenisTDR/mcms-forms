@@ -3,6 +3,9 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
 
 export default function requiredFromListValidator(
   control: FormControl, field: FormlyFieldConfig): ValidationErrors {
+  if (!control.value) {
+    return null;
+  }
   const list: any[] = field.templateOptions.options as any[];
   const compareWith = field.templateOptions.compareWith;
   const val = control.value;
