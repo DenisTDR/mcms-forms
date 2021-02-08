@@ -1,6 +1,6 @@
 {
   "name": "mcms-forms",
-  "version": "1.4.1-nightly-1",
+  "version": "1.4.1-nightly-7",
   "scripts": {
     "ng": "ng",
     "start": "npm run start:mcms-forms",
@@ -38,7 +38,6 @@
     "ngx-autosize": "^1.8.4",
     "ngx-file-drop": "^10.1.1",
     "rxjs": "~6.6.3",
-    "scroll-into-view-if-needed": "^2.2.26",
     "tslib": "^2.1.0",
     "zone.js": "~0.10.3"
   },

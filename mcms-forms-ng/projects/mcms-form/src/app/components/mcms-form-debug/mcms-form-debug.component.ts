@@ -20,6 +20,10 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
         formState:
         <pre>{{safeFormState | json}}</pre>
       </div>
+      <div>
+        options:
+        <pre>{{safeOptions | json}}</pre>
+      </div>
     </div>
   `,
   styles: [`
@@ -34,11 +38,13 @@ export class McmsFormDebugComponent implements OnChanges {
   public safeValid: boolean;
   public safeModel: any;
   public safeFormState: any;
+  public safeOptions: any;
 
   @Input() public fields: FormlyFieldConfig[];
   @Input() public valid: boolean;
   @Input() public model: any;
   @Input() public formState: any;
+  @Input() public options: any;
 
   public ngOnChanges(changes: SimpleChanges): void {
     setTimeout(() => {
@@ -53,6 +59,9 @@ export class McmsFormDebugComponent implements OnChanges {
       }
       if (changes.formState) {
         this.safeFormState = this.formState;
+      }
+      if (changes.safeOptions) {
+        this.safeOptions = this.options;
       }
     }, 200);
   }

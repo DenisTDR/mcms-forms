@@ -1,4 +1,4 @@
-<div *ngIf="isDebug" class="my-2">
+<div *ngIf="isDebug" class="ml-2 my-2 d-inline-block">
   <button (click)="load()" class="btn btn-outline-secondary mr-2">Reinit</button>
   <button (click)="clearCache()" class="btn btn-outline-secondary mr-2">Clear open api config cache</button>
   <button (click)="reloadPage()" class="btn btn-outline-secondary mr-2">Reload Page</button>
@@ -17,13 +17,13 @@
   </div>
 </ng-container>
 
-<div #spinnerContainer>
+<ng-container *ngIf="options.spinner === 'inside-form'">
   <div class="d-flex justify-content-center py-5" *ngIf="state !== 'ready'">
     <div class="spinner-border text-primary" role="status">
       <span class="sr-only">Loading...</span>
     </div>
   </div>
-</div>
+</ng-container>
 
 <div class="d-nf-flex justify-content-end my-3" [hidden]="options?.hideSubmitButton">
   <button class="btn btn-primary submit-button" type="button" (click)="submit()">
@@ -36,5 +36,7 @@
   <mcms-form-debug [fields]="fieldsClone"
                    [valid]="form.valid"
                    [model]="model"
-                   [formState]="formOptions.formState"></mcms-form-debug>
+                   [formState]="formOptions.formState"
+                   [options]="options"
+  ></mcms-form-debug>
 </div>

@@ -1,14 +1,12 @@
 import {
   AfterViewInit,
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
   OnInit,
   Output,
   SimpleChanges,
-  ViewChild
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
@@ -19,7 +17,6 @@ import { OpenApiToFormlyService } from '../../mcms-formly/services/open-api-to-f
 import { ApiService } from '../../services/api.service';
 import { environment } from '../../../environments/environment';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import scrollIntoView from 'scroll-into-view-if-needed';
 import { MessagesService } from '../../mcms-formly/services/messages.service';
 import { debounceTime } from 'rxjs/operators';
 
@@ -29,9 +26,7 @@ import { debounceTime } from 'rxjs/operators';
   templateUrl: './mcms-form.component.html',
   styles: [`
     :host {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
+      display: contents;
     }
   `],
 })
@@ -45,11 +40,10 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() public schemaName: string;
   @Input() public action: string;
   @Input() public additionalFields: any;
-  @Input() public options: any;
-
-  @ViewChild('spinnerContainer', {read: ElementRef})
-  public spinnerContainer: ElementRef;
-
+  @Input() public options: {
+    spinner: string, hideSubmitButton: boolean,
+    basePath: string, skipApiRequest: boolean, formState: any
+  };
 
   public formOptions: FormlyFormOptions;
 
@@ -78,13 +72,7 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
     this.formManager = new FormlyFormManager(this, openApiToFormlyService, api, messages);
     this.formManager.stateChanged.pipe(untilDestroyed(this)).subscribe(state => {
       this.state = state;
-      if (state === 'saving') {
-        setTimeout(() => {
-          if (state === 'saving') {
-            scrollIntoView(this.spinnerContainer?.nativeElement, {behavior: 'smooth'});
-          }
-        }, 100);
-      }
+      this.customEvent.emit({type: 'state-changed', data: {state}});
     });
 
     this.form.valueChanges.pipe(untilDestroyed(this), debounceTime(500)).subscribe(value => {
@@ -137,7 +125,7 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
 
   public async submit(): Promise<void> {
     if (this.state !== 'ready') {
-      this.messages.alert('Form not submittable!');
+      this.messages.alert('You can\'t do this right now.');
       return;
     }
     try {
@@ -162,7 +150,7 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
       }
     } catch (e) {
       console.error(e);
-      let msg = 'An error occurred, check de dev (browser) web console.';
+      let msg = 'An unknown/fatal error occurred, check the dev (browser) web console for more details.';
       if (e?.error?.error) {
         msg = e.error.error;
       }
