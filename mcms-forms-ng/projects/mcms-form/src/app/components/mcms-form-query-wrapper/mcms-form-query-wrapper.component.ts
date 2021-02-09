@@ -22,7 +22,12 @@ export class McmsFormQueryWrapperComponent implements OnInit {
     const queryObj = parse(window.location.search);
     for (const field of this.fields) {
       if (queryObj[field] !== undefined) {
-        this.paramsObj[field] = queryObj[field] as string;
+        const str = queryObj[field] as string;
+        if (str.startsWith('"')) {
+          this.paramsObj[field] = JSON.parse(decodeURIComponent(str));
+        } else {
+          this.paramsObj[field] = decodeURIComponent(str);
+        }
       }
     }
     if (this.paramsObj.openApiConfigUrl) {
