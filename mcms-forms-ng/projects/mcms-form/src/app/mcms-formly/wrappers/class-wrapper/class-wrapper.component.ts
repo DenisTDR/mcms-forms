@@ -1,13 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { FieldWrapper } from '@ngx-formly/core';
 
 @Component({
   selector: 'mcms-class-wrapper',
   template: `
-    <div [class]="to.wrapperClasses">
-      <ng-template #fieldComponent></ng-template>
-    </div>
+    <ng-template #fieldComponent></ng-template>
   `,
 })
-export class ClassWrapperComponent extends FieldWrapper {
+export class ClassWrapperComponent extends FieldWrapper implements OnInit {
+  @HostBinding('class') public classNames;
+
+  public ngOnInit(): void {
+    this.classNames = this.to.wrapperClasses;
+  }
 }

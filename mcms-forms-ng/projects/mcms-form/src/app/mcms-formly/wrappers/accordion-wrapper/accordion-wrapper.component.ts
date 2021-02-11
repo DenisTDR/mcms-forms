@@ -10,9 +10,9 @@ import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap';
     <ngb-accordion #acc="ngbAccordion" [class.has-error]="showError" [activeIds]="[panelId]" class="mb-2 d-block">
       <ngb-panel [id]="panelId">
         <ng-template ngbPanelHeader let-opened="opened">
-          <div class="d-flex justify-content-between align-items-center" *ngIf="to.label">
+          <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
-              <h4 class="mb-0">{{ to.label }}</h4>
+              <h4 class="mb-0" *ngIf="to.label">{{ to.label }}</h4>
             </div>
             <div class="d-flex">
               <div [hidden]="!acc.isExpanded(panelId)" class="d-flex">

@@ -1,6 +1,6 @@
 {
   "name": "mcms-forms",
-  "version": "1.4.1-nightly-7",
+  "version": "1.4.1-nightly-8",
   "scripts": {
     "ng": "ng",
     "start": "npm run start:mcms-forms",

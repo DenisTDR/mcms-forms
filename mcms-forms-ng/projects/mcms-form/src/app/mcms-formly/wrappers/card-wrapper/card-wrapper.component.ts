@@ -5,9 +5,9 @@ import { FieldWrapper } from '@ngx-formly/core';
   selector: 'mcms-card-wrapper',
   template: `
     <div class="card mb-2" [class.has-error]="showError">
-      <div class="card-header d-flex justify-content-between align-items-center" *ngIf="to.label">
+      <div class="card-header d-flex justify-content-between align-items-center" *ngIf="!to.hideHeader">
         <div class="d-flex align-items-center">
-          <h4 class="mb-0">{{ to.label }}</h4>
+          <h4 class="mb-0" *ngIf="to.label">{{ to.label }}</h4>
         </div>
         <div>
           <mcms-wrapper-header-actions [field]="field"></mcms-wrapper-header-actions>
