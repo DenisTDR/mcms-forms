@@ -22,12 +22,7 @@ export class McmsFormQueryWrapperComponent implements OnInit {
     const queryObj = parse(window.location.search);
     for (const field of this.fields) {
       if (queryObj[field] !== undefined) {
-        const str = queryObj[field] as string;
-        if (str.startsWith('"')) {
-          this.paramsObj[field] = JSON.parse(decodeURIComponent(str));
-        } else {
-          this.paramsObj[field] = decodeURIComponent(str);
-        }
+        this.paramsObj[field] = JSON.parse(queryObj[field] as string);
       }
     }
     if (this.paramsObj.openApiConfigUrl) {
@@ -59,7 +54,7 @@ export class McmsFormQueryWrapperComponent implements OnInit {
       for (const entry of entries) {
         const {height} = entry.contentRect;
         window.top.postMessage({
-            height,
+            height: height + 30,
             type: 'mcms-form-height-changed',
             message: 'I changed my height.',
             senderId: this.paramsObj.formInstanceId,

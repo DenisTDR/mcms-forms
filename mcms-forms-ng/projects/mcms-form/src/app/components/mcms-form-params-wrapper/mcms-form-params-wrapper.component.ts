@@ -22,7 +22,7 @@ export class McmsFormParamsWrapperComponent implements OnInit {
   @Input() public action: string;
   @Input() public getUrl: string;
   @Input() public submitUrl: string;
-  @Input() public additionalFields: string;
+  @Input() public additionalFields: string | any;
   @Input() public formInstanceId: string;
   @Input() public options: string;
 
@@ -39,15 +39,17 @@ export class McmsFormParamsWrapperComponent implements OnInit {
     private api: ApiService,
   ) {
 
-    this.isDebug = window.location.href.indexOf('debug=true') !== -1 || !environment.production;
+    this.isDebug = window.location.href.indexOf('formly-debug=true') !== -1 || !environment.production;
   }
 
   public ngOnInit(): void {
-    if (typeof this.options === 'string' && this.options[0] === '{') {
+    if (this.options && typeof this.options === 'string') {
       try {
         this.optionsParsed = JSON.parse(this.options);
       } catch (e) {
       }
+    } else {
+      this.optionsParsed = this.options;
     }
 
     const openApiConfigUrl = (this.optionsParsed && this.optionsParsed.openApiConfigUrl) || (window as any).openApiConfigUrl;
@@ -58,11 +60,13 @@ export class McmsFormParamsWrapperComponent implements OnInit {
     this.api.submitUrl = this.submitUrl;
     this.api.getUrl = this.getUrl;
     this.additionalFieldsParsed = {};
-    if (this.additionalFields && this.additionalFields[0] === '{') {
+    if (this.additionalFields && typeof this.additionalFields === 'string') {
       try {
         this.additionalFieldsParsed = JSON.parse(this.additionalFields);
       } catch (e) {
       }
+    } else {
+      this.additionalFieldsParsed = this.additionalFields;
     }
 
     this.loaded = true;

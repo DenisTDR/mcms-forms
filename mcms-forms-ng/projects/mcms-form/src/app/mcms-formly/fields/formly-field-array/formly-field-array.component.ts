@@ -22,7 +22,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
     <div class="d-flex justify-content-end">
       <button class="btn btn-sm btn-primary"
               type="button"
-              (click)="add(model && model.length || 0)"
+              (click)="add(model?.length || 0)"
               *ngIf="canAdd" [innerHTML]="customFieldConfig.addButtonContent || '<i class=\\'fas fa-plus fa-fw\\'></i>'">
       </button>
     </div>
@@ -45,7 +45,6 @@ export class FormlyFieldArrayComponent extends FieldArrayType implements OnInit 
     if (!this.to.customFieldConfig) {
       this.to.customFieldConfig = {};
     }
-
     if (this.lastMinLength !== this.minLength) {
       this.forceAdjustToMinLength();
     }
@@ -86,11 +85,11 @@ export class FormlyFieldArrayComponent extends FieldArrayType implements OnInit 
   }
 
   public get minLength(): number {
-    return this.field.templateOptions.minLength;
+    return this.field.templateOptions.minItems;
   }
 
   public get maxLength(): number {
-    return this.field.templateOptions.maxLength;
+    return this.field.templateOptions.maxItems;
   }
 
   public get canRemove(): boolean {

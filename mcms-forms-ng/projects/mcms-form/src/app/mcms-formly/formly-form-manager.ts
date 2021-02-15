@@ -11,6 +11,7 @@ import { FormSubmitResponse } from './models/form-submit-response';
 import { McmsFormState } from '../components/mcms-form/mcms-form-state';
 import { McmsFormComponent } from '../components/mcms-form/mcms-form.component';
 import { MessagesService } from './services/messages.service';
+import * as areEqual from 'fast-deep-equal';
 
 export class FormlyFormManager {
   get state(): McmsFormState {
@@ -47,14 +48,17 @@ export class FormlyFormManager {
 
   private stateChangedSubject: Subject<McmsFormState> = new Subject<McmsFormState>();
 
-  public async load(basePath?: string): Promise<{ model: any, fields: FormlyFieldConfig[] }> {
+  public async load(basePath?: string): Promise<{ model: any, fields: FormlyFieldConfig[], vObj: any }> {
     this.state = 'form-loading';
     this.openApiToFormlyService.helper.basePath = basePath;
+    // console.log('getting fields');
     const fields = await this.openApiToFormlyService.getConfig(this.component.schemaName);
+    // console.log('got fields');
     const model = await this.api.get();
     this.initialModel = clone(model);
+    const vObj = this.openApiToFormlyService.helper.buildFormStateVolatileObject(fields);
     this.state = 'ready';
-    return {model, fields};
+    return {model, fields, vObj};
   }
 
   public async submit(model: any): Promise<FormSubmitResponse> {

@@ -1,45 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, pipe } from 'rxjs';
-import { publishReplay, refCount, take, tap } from 'rxjs/operators';
+import { merge, Observable, Subject } from 'rxjs';
+import { distinctUntilChanged, publishReplay, refCount, take, tap } from 'rxjs/operators';
+import * as areEqual from 'fast-deep-equal';
 
 @Injectable()
 export class FormlyHelpersApiService {
-
-  private cache: { [key: string]: Observable<any> } = {};
 
   constructor(
     private http: HttpClient,
   ) {
   }
 
+  private obsCache: { [key: string]: Observable<any> } = {};
+  private subjects: { [key: string]: Subject<any> } = {};
+  private cacheDuration = 5000;
+
   public get<T>(url: string): Observable<T> {
     return this.http.get<T>(url);
-  }
-
-  public getCaching<T>(url: string, windowTime?: number, clearCache?: boolean): Observable<T> {
-    if (clearCache) {
-      this.clearCache(url);
-    }
-    if (!this.cache[url]) {
-      this.cache[url] = this.get<T>(url).pipe(
-        pipe(tap(res => {
-          this.clearRefsArtifacts(res);
-        })),
-        publishReplay(1, windowTime || 5000), // this tells Rx to cache the latest emitted
-        refCount(), // and this tells Rx to keep the Observable alive as long as there are any Subscribers
-        take(1),
-      );
-    }
-    return this.cache[url];
-  }
-
-  public clearCache(url?: string): void {
-    if (url) {
-      delete this.cache[url];
-      return;
-    }
-    this.cache = {};
   }
 
   public clearRefsArtifacts(obj): void {
@@ -60,6 +38,40 @@ export class FormlyHelpersApiService {
         }
       }
     }
+  }
+
+  public getCaching<T>(url: string, noCache?: boolean): Observable<T> {
+    if (!this.subjects[url]) {
+      this.subjects[url] = new Subject<T>();
+    }
+    // merge the request observable with the Subject, which will be triggered (*) when a new value will be fetch from backend in the future
+    return merge(this.makeGetObservable(url, noCache), this.subjects[url])
+      // pipe a distinctUntilChanged operator to avoid duplicate values on first request
+      .pipe(distinctUntilChanged((a, b) => {
+        return areEqual(a, b);
+      }));
+  }
+
+  public clearCacheAndTriggerRequest(url: string): void {
+    this.getCaching(url, true).pipe(take(1)).toPromise().then();
+  }
+
+  private makeGetObservable(url: string, noCache?: boolean): Observable<any> {
+    if (noCache && this.obsCache[url]) {
+      delete this.obsCache[url];
+    }
+    if (!this.obsCache[url]) {
+      this.obsCache[url] = this.http.get(url).pipe(
+        tap(value => {
+          this.clearRefsArtifacts(value);
+        }),
+        tap(value => this.subjects[url]?.next(value)), // emit the new value got from backend to all subscriptions (*)
+        publishReplay(1, this.cacheDuration), // this tells Rx to cache the latest emitted
+        refCount(), // and this tells Rx to keep the Observable alive as long as there are any Subscribers
+        take(1), // complete after the first (count=1) value emitted
+      );
+    }
+    return this.obsCache[url];
   }
 
 }

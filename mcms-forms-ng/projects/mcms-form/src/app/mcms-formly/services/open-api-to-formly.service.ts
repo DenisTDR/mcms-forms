@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OpenApiConfigService } from './open-api-config.service';
-import { FormlyFieldConfig } from '@ngx-formly/core';
+import { FormlyField, FormlyFieldConfig } from '@ngx-formly/core';
 import { IExtendedOpenApiProperty, IOpenApiDocument, IOpenApiProperty, IOpenApiSchema } from '../models/open-api-models';
 import * as deepmerge from 'deepmerge';
 import { Validators } from '@angular/forms';
@@ -42,6 +42,7 @@ export class OpenApiToFormlyService {
   };
   private fieldsToCopyToTemplateObject: Array<string | string[]> = [
     'minLength', 'maxLength', ['minimum', 'min'], ['maximum', 'max'],
+    'minItems', 'maxItems',
   ];
 
   public helper: OpenApiConfigHelper;
@@ -359,7 +360,6 @@ export class OpenApiToFormlyService {
     this.openApiConfigService.clearCache();
     this.openApiDoc = null;
   }
-
 
   private patchFileFieldLinksConfig(fieldConfig: FormlyFieldConfig): void {
     const fileConfig = fieldConfig.templateOptions.customFieldConfig as FormlyFileFieldConfig;

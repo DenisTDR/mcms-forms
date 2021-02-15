@@ -50,7 +50,7 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
   public isDebug: boolean;
   public state: McmsFormState;
 
-  public form: FormGroup = new FormGroup({});
+  public form: FormGroup;
   public model = {};
   public fields: FormlyFieldConfig[];
 
@@ -59,6 +59,8 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
   public viewInit: boolean;
 
   private formManager: FormlyFormManager;
+
+  private vObj: any;
 
   public get isPatch(): boolean {
     return this.action === 'patch';
@@ -75,11 +77,8 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
       this.customEvent.emit({type: 'state-changed', data: {state}});
     });
 
-    this.form.valueChanges.pipe(untilDestroyed(this), debounceTime(500)).subscribe(value => {
-      this.customEvent.emit({type: 'form-updated', data: {value, status: this.form.status}});
-    });
+    this.isDebug = window.location.href.indexOf('formly-debug=true') !== -1 || !environment.production;
 
-    this.isDebug = window.location.href.indexOf('debug=true') !== -1 || !environment.production;
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -88,12 +87,14 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  private buildFormOptions(): void {
-    if (!this.formOptions) {
+  private buildFormOptions(force?: boolean): void {
+    if (force || !this.formOptions) {
       this.formOptions = {};
     }
     this.formOptions.formState = Object.assign({},
       this.formOptions.formState, {parentModel: this.model}, this.options && this.options.formState);
+    this.formOptions.formState.vObj = this.vObj;
+    // console.log(this.formOptions.formState);
   }
 
   public ngOnInit(): void {
@@ -105,18 +106,28 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   public async load(): Promise<void> {
+    // console.log('load()');
+    this.form = new FormGroup({});
+
+    this.form.valueChanges.pipe(untilDestroyed(this), debounceTime(500)).subscribe(value => {
+      this.customEvent.emit({type: 'form-updated', data: {value, status: this.form.status}});
+    });
+
+    this.buildFormOptions(true);
     this.fields = null;
     const loadedData = await this.formManager.load(this.options.basePath);
     this.fields = loadedData.fields;
     this.model = clone(loadedData.model);
+    this.vObj = loadedData.vObj;
     if (this.isDebug) {
       this.fieldsClone = clone(this.fields);
-      // console.log(this.fieldsClone);
     }
     if (this.additionalFields) {
       Object.assign(this.model, this.additionalFields);
     }
+    // console.log('put vObj');
     this.buildFormOptions();
+    // console.log('load() done');
   }
 
   public async reloadPage(): Promise<void> {
@@ -164,5 +175,4 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
       this.viewInit = true;
     });
   }
-
 }
