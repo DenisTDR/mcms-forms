@@ -5,7 +5,7 @@ cd ./bin/Release || exit 0
 rm -f ./MCMS.Forms.*.nupkg
 cd ../../
 
-dotnet build -c Release
+./build.sh || exit 0
 
 cd ./bin/Release || exit 0
 
