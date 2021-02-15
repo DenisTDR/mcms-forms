@@ -7,6 +7,9 @@ export default function requiredFromListValidator(
     return null;
   }
   const list: any[] = field.templateOptions.options as any[];
+  if (!list) {
+    return null;
+  }
   const val = control.value;
   if (list.some(li => field.templateOptions.compareWith(li, val))) {
     return null;
