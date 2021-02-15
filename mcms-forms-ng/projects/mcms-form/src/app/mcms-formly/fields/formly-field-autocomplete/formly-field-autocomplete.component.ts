@@ -225,5 +225,6 @@ export class FormlyFieldAutocompleteComponent extends FieldType implements OnIni
     if (!areEqual(crtValue, resultedModel)) {
       this.formControl.setValue(resultedModel);
     }
+    this.formControl.updateValueAndValidity();
   }
 }
