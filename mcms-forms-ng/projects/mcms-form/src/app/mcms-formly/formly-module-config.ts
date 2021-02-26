@@ -14,6 +14,7 @@ import { FormlyFieldCustomNumberComponent } from './fields/formly-field-custom-n
 import { FormlyTextComponent } from './fields/formly-text/formly-text.component';
 import requiredFromListValidator from './validators/required-from-list-validator';
 import { AccordionWrapperComponent } from './wrappers/accordion-wrapper/accordion-wrapper.component';
+import { FormlyButtonComponent } from './fields/formly-button/formly-button.component';
 
 export const formlyModuleConfig: ConfigOption = {
   types: [
@@ -64,6 +65,11 @@ export const formlyModuleConfig: ConfigOption = {
     {
       name: 'text',
       component: FormlyTextComponent,
+    },
+    {
+      name: 'button',
+      component: FormlyButtonComponent,
+      wrappers: [],
     },
     // {
     //   name: 'dynamic',

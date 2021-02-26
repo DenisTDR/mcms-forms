@@ -36,6 +36,7 @@ import { FieldFillButtonComponent } from './components/field-fill-button/field-f
 import { WrapperHeaderActionsComponent } from './components/wrapper-header-actions/wrapper-header-actions.component';
 import { AlertModalComponent } from './components/alert-modal/alert-modal.component';
 import { MessagesService } from './services/messages.service';
+import { FormlyButtonComponent } from './fields/formly-button/formly-button.component';
 
 const usedNgbModules = [
   NgbDatepickerModule,
@@ -72,6 +73,7 @@ const wrappers = [
     FieldFillButtonComponent,
     WrapperHeaderActionsComponent,
     AlertModalComponent,
+    FormlyButtonComponent,
   ],
   imports: [
     CommonModule,
