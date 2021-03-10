@@ -140,7 +140,7 @@ export class FormlyFieldAutocompleteComponent extends FieldType implements OnIni
               : this.getOptions.filter(v => this.searchableFormatter(v).toLowerCase().indexOf(term.toLowerCase()) > -1)
                 .slice(0, this.maxLength);
             if (results?.length) {
-              return results;
+              return results.slice(0, 25);
             }
             return [null];
           }
