@@ -2,7 +2,7 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
 import { FormlyHelpersApiService } from './formly-helpers-api.service';
 import clone from 'clone';
 import * as deepmerge from 'deepmerge';
-import { take, tap } from 'rxjs/operators';
+import { map, take, tap } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import * as areEqual from 'fast-deep-equal';
 
@@ -35,11 +35,11 @@ export default class OpenApiConfigHelper {
     }
   }
 
-  public loadOptions(fieldConfig: FormlyFieldConfig, noCache?: boolean): Promise<any[]> {
+  public loadOptions(fieldConfig: FormlyFieldConfig, noCache?: boolean): Promise<void> {
     let url: string;
 
     if (fieldConfig.templateOptions.customFieldConfig.globalVolatileUrl) {
-      return new Promise<any[]>(resolve => resolve());
+      return new Promise<void>(resolve => resolve());
     }
 
     if (!fieldConfig.templateOptions.customFieldConfig.fullOptionsUrl) {
@@ -51,7 +51,8 @@ export default class OpenApiConfigHelper {
 
     return this.formlyHelpersApi.getCaching<any[]>(url, noCache).pipe(tap(value => {
       fieldConfig.templateOptions.options = value;
-    }), take(1)).toPromise();
+    }), take(1), map(_ => {
+    })).toPromise();
   }
 
   public patchDynamicFieldConfig(fieldConfig: FormlyFieldConfig): void {

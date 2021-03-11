@@ -120,7 +120,7 @@ export class FormlyFormManager {
       for (const fileFieldConfig of pendingFileFieldsConfigs) {
         fileFieldConfig.stateChanged.subscribe(_ => {
           if (allDone()) {
-            resolve();
+            resolve(null);
           }
         });
 
