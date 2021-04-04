@@ -18,7 +18,8 @@ build-angular:
   cache:
     paths:
       - mcms-forms-ng/node_modules
-  when: manual
+  only: 
+    - master
 
 build-nupkg:
   stage: build-nupkg
@@ -26,14 +27,15 @@ build-nupkg:
   script:
     - srcDir=./mcms-forms-ng/dist/mcms-form
     - fullPath=./MCMS.Forms/wwwroot/mcms-forms-files/1.5.1008
+    - mkdir -p ${fullPath:?}
     - cp ${srcDir:?}/mcms-form.*.js ${srcDir:?}/styles.css ${srcDir:?}/3rdpartylicenses.txt ${fullPath:?} || exit
     - cd MCMS.Forms
     - dotnet pack -c Release -o nuget-build ./MCMS.Forms.csproj
   artifacts:
     paths:
       - nuget-build
-  when: manual
-
+  only:
+    - master
 
 deploy:
   stage: deploy
@@ -43,3 +45,5 @@ deploy:
     - dotnet nuget add source "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/packages/nuget/index.json" --name gitlab --username gitlab-ci-token --password $CI_JOB_TOKEN --store-password-in-clear-text
     - dotnet nuget push "./nuget-build/*.nupkg" "./nuget-build/*.snupkg" --source gitlab
   when: manual
+  only:
+    - master
