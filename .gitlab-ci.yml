@@ -18,7 +18,7 @@ build-angular:
   cache:
     paths:
       - mcms-forms-ng/node_modules
-  only: 
+  only:
     - master
 
 build-nupkg:
@@ -30,7 +30,7 @@ build-nupkg:
     - mkdir -p ${fullPath:?}
     - cp ${srcDir:?}/mcms-form.*.js ${srcDir:?}/styles.css ${srcDir:?}/3rdpartylicenses.txt ${fullPath:?} || exit
     - cd MCMS.Forms
-    - dotnet pack -c Release -o nuget-build ./MCMS.Forms.csproj
+    - dotnet pack -c Release -o ../nuget-build ./MCMS.Forms.csproj
   artifacts:
     paths:
       - nuget-build
