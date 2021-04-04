@@ -26,7 +26,7 @@ build-nupkg:
   image: mcr.microsoft.com/dotnet/sdk:5.0
   script:
     - srcDir=./mcms-forms-ng/dist/mcms-form
-    - version=${awk -F'[<>]' '/<Version>/{print $3}' ./MCMS.Forms/MCMS.Forms.csproj}
+    - version=$(awk -F'[<>]' '/<Version>/{print $3}' ./MCMS.Forms/MCMS.Forms.csproj)
     - fullPath=./MCMS.Forms/wwwroot/mcms-forms-files/$version
     - mkdir -p ${fullPath:?}
     - cp ${srcDir:?}/mcms-form.*.js ${srcDir:?}/styles.css ${srcDir:?}/3rdpartylicenses.txt ${fullPath:?} || exit
