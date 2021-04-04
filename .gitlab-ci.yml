@@ -15,6 +15,9 @@ build-angular:
     paths:
       - mcms-forms-ng/dist/mcms-form
     expire_in: 2 days
+  cache:
+    paths:
+      - mcms-forms-ng/node_modules
   when: manual
 
 build-nupkg:
