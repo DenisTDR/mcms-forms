@@ -8,7 +8,7 @@ build-angular:
   image: node:14-alpine
   before_script:
     - cd mcms-forms-ng
-    - npm ci
+    - npm i
   script:
     - npm run build:form
   artifacts:
