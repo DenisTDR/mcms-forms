@@ -3,17 +3,17 @@
     var basePath = MCMSFormsHelper.GetBasePath(Url);
 }
 <script>
-    var mcmsFormsStaticFiles = {
+    const mcmsFormsStaticFiles = {
         load: function () {
             if (this.loaded) { return; }
             this.loaded = true;
-            for (var i = 0; i < this.files.js.length; i++) {
-                var script = document.createElement('script');
+            for (let i = 0; i < this.files.js.length; i++) {
+                const script = document.createElement('script');
                 script.src = this.files.js[i];
                 document.body.appendChild(script);
             }
-            for (var j = 0; j < this.files.css.length; j++) {
-                var link = document.createElement('link');
+            for (let j = 0; j < this.files.css.length; j++) {
+                const link = document.createElement('link');
                 link.href = this.files.css[j];
                 link.rel = 'stylesheet';
                 document.head.appendChild(link);

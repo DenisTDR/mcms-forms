@@ -16,7 +16,7 @@ namespace MCMS.Forms
             var pathFromEnv = Environment.GetEnvironmentVariable("MCMS_FORM_STATIC_FILES_PATH");
             var hasPathFromEnv = pathFromEnv is {};
 
-            var basePath = hasPathFromEnv && !string.IsNullOrEmpty(pathFromEnv) ? pathFromEnv : "mcms-forms-files/";
+            var basePath = !string.IsNullOrEmpty(pathFromEnv) ? pathFromEnv : "/_content/MCMS.Forms/mcms-forms-files/";
             if (basePath.EndsWith("/"))
             {
                 basePath = basePath.TrimEnd('/');

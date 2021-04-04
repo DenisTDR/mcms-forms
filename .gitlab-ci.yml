@@ -1,0 +1,40 @@
+stages:
+  - build-angular
+  - build-nupkg
+  - deploy
+
+build-angular:
+  stage: build-angular
+  image: node:10-alpine
+  script:
+    - cd mcms-forms-ng
+    - npm run build:form
+  artifacts:
+    paths:
+      - mcms-forms-ng/dist/mcms-form
+    expire_in: 2 days
+  when: manual
+
+build-nupkg:
+  stage: build-nupkg
+  image: mcr.microsoft.com/dotnet/sdk:5.0
+  script:
+    - srcDir=./mcms-forms-ng/dist/mcms-form
+    - fullPath=./MCMS.Forms/wwwroot/mcms-forms-files/1.5.1008
+    - cp ${srcDir:?}/mcms-form.*.js ${srcDir:?}/styles.css ${srcDir:?}/3rdpartylicenses.txt ${fullPath:?} || exit
+    - cd MCMS.Forms
+    - dotnet pack -c Release -o nuget-build ./MCMS.Forms.csproj
+  artifacts:
+    paths:
+      - nuget-build
+  when: manual
+
+
+deploy:
+  stage: deploy
+  image: mcr.microsoft.com/dotnet/sdk:5.0
+  script:
+    - cd MCMS.Forms
+    - dotnet nuget add source "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/packages/nuget/index.json" --name gitlab --username gitlab-ci-token --password $CI_JOB_TOKEN --store-password-in-clear-text
+    - dotnet nuget push "./nuget-build/*.nupkg" "./nuget-build/*.snupkg" --source gitlab
+  when: manual

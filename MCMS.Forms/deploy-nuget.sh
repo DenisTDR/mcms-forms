@@ -2,7 +2,7 @@
 
 
 cd ./bin/Release || exit 0
-rm -f ./MCMS.Forms.*.nupkg
+#rm -f ./MCMS.Forms.*.nupkg
 cd ../../
 
 ./build.sh || exit 0
