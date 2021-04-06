@@ -1,17 +1,25 @@
 #!/bin/bash
 
-resPath=./wwwroot/mcms-forms-files
-version=$(awk -F'[<>]' '/<Version>/{print $3}' ./MCMS.Forms.csproj)
+destPath=./wwwroot/mcms-forms-files
 
-rm -rf ${resPath:?}
+if [ $# -eq 0 ] || [[ $1 != "publish-"* ]]; then
+  echo "Invalid git tag argument supplied. Usage: pack.sh publish-x.y.z"
+  exit 1
+fi
 
-fullPath=$resPath/$version
 
-mkdir -p "$fullPath"
+version=${1#publish-}
+#version=$(awk -F'[<>]' '/<Version>/{print $3}' ./MCMS.Forms.csproj)
 
-cp ../mcms-forms-ng/dist/mcms-form/mcms-form.*.js ../mcms-forms-ng/dist/mcms-form/styles.css \
-  ../mcms-forms-ng/dist/mcms-form/3rdpartylicenses.txt "${fullPath:?}" || exit
-  
-echo "copied: "
-  
-ls -lh "${fullPath:?}"
+rm -rf ${destPath:?}
+
+destPath=$destPath/$version
+
+mkdir -p "$destPath"
+
+srcPath=../mcms-forms-ng/dist/mcms-form
+
+cp ${srcPath:?}/mcms-form.*.js ${srcPath:?}/styles.css ${srcPath:?}/3rdpartylicenses.txt "${destPath:?}" || exit
+
+echo "copied for version" "${version:?}"":"
+ls -lh "${destPath:?}"
