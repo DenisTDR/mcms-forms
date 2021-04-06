@@ -1,7 +1,7 @@
 stages:
   - build-angular
   - build-nupkg
-  - deploy
+  - nuget-push
 
 build-angular:
   stage: build-angular
@@ -19,7 +19,7 @@ build-angular:
     paths:
       - mcms-forms-ng/node_modules
   only:
-    - master
+    - main
 
 build-nupkg:
   stage: build-nupkg
@@ -36,13 +36,13 @@ build-nupkg:
     paths:
       - nuget-build
   only:
-    - master
+    - main
 
-deploy:
-  stage: deploy
+nuget-push:
+  stage: nuget-push
   image: mcr.microsoft.com/dotnet/sdk:5.0
   script:
     - dotnet nuget add source "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/packages/nuget/index.json" --name gitlab --username gitlab-ci-token --password $CI_JOB_TOKEN --store-password-in-clear-text
     - dotnet nuget push "./nuget-build/*.nupkg" "./nuget-build/*.snupkg" --source gitlab
   only:
-    - master
+    - main

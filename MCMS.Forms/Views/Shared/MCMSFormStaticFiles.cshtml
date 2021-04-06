@@ -4,17 +4,25 @@
 }
 <script>
     const mcmsFormsStaticFiles = {
-        load: function () {
-            if (this.loaded) { return; }
-            this.loaded = true;
-            for (let i = 0; i < this.files.js.length; i++) {
+        load: () => {
+            if (mcmsFormsStaticFiles.loaded) { return; }
+            mcmsFormsStaticFiles.loaded = true;
+            for (let i = 0; i < mcmsFormsStaticFiles.files.js.length; i++) {
                 const script = document.createElement('script');
-                script.src = this.files.js[i];
+                script.src = mcmsFormsStaticFiles.files.js[i];
+                script.onerror = (e) => {
+                    if (mcmsFormsStaticFiles.loadError) {
+                        return;    
+                    }
+                    mcmsFormsStaticFiles.loadError = true;
+                    console.error(e);
+                    alert('Couldn\'t load MCMS Forms scripts. Please try refreshing the page.');
+                };
                 document.body.appendChild(script);
             }
-            for (let j = 0; j < this.files.css.length; j++) {
+            for (let j = 0; j < mcmsFormsStaticFiles.files.css.length; j++) {
                 const link = document.createElement('link');
-                link.href = this.files.css[j];
+                link.href = mcmsFormsStaticFiles.files.css[j];
                 link.rel = 'stylesheet';
                 document.head.appendChild(link);
             }
@@ -26,6 +34,7 @@
                "@basePath/mcms-form.main.js"
             ],
             css:  ["@basePath/styles.css"]
-        }
+        },
+        loadError: false,
     }
 </script>
