@@ -25,6 +25,7 @@ build-nupkg:
   stage: build-nupkg
   image: mcr.microsoft.com/dotnet/sdk:5.0
   script:
+    - cd MCMS.Forms
     - ./copy-js.sh $CI_COMMIT_TAG
     - ./pack.sh $CI_COMMIT_TAG
   artifacts:
@@ -37,7 +38,8 @@ nuget-push:
   stage: nuget-push
   image: mcr.microsoft.com/dotnet/sdk:5.0
   script:
+    - cd MCMS.Forms/nuget-build
     - dotnet nuget add source "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/packages/nuget/index.json" --name gitlab --username gitlab-ci-token --password $CI_JOB_TOKEN --store-password-in-clear-text
-    - dotnet nuget push "./nuget-build/*.nupkg" "./nuget-build/*.snupkg" --source gitlab
+    - dotnet nuget push "*.nupkg" "*.snupkg" --source gitlab
   only:
     - /^publish-.*$/

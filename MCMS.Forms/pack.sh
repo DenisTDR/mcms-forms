@@ -7,7 +7,7 @@ fi
 
 version=${1#publish-}
 
-buildDir=../nuget-build
+buildDir=./nuget-build
 
 export VERSION=$version
 export ENV_TYPE=CI_BUILD
