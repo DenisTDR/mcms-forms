@@ -8,4 +8,4 @@ fi
 
 key="$1"
 
-dotnet nuget push "./nuget-build/*.nupkg" "./nuget-build/*.snupkg" --api-key "$key" --source https://api.nuget.org/v3/index.json
+dotnet nuget push "./nuget-build/*.nupkg" "./nuget-build/*.snupkg" --api-key "$key" --source https://api.nuget.org/v3/index.json --skip-duplicate
