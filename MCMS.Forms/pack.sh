@@ -13,5 +13,5 @@ export VERSION=$version
 export ENV_TYPE=CI_BUILD
 
 mkdir -p $buildDir
-rm -rf bin obj
+rm -rf ./bin ./obj
 dotnet pack -c Release -o "$buildDir" -p:PackageVersion="$version" MCMS.Forms.csproj
