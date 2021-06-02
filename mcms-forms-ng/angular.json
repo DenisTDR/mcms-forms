@@ -91,7 +91,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "mcms-forms:build"
+            "browserTarget": "mcms-forms:build",
+            "baseHref": "/mcms-forms/"
           },
           "configurations": {
             "production": {

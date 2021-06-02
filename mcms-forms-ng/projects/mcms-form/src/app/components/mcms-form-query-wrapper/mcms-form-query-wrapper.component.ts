@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { parse } from 'query-string';
-import ResizeObserver from 'resize-observer-polyfill';
 import { McmsFormParamsWrapperComponent } from '../mcms-form-params-wrapper/mcms-form-params-wrapper.component';
 
 @Component({
