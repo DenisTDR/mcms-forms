@@ -7,8 +7,8 @@ build-angular:
   stage: build-angular
   image: node:14-alpine
   before_script:
-    - npm i -g npm@latest
     - cd mcms-forms-ng
+    - npm i -g npm@latest
     - npm i
   script:
     - npm run build:form
@@ -40,7 +40,7 @@ nuget-push:
   image: mcr.microsoft.com/dotnet/sdk:5.0
   script:
     - cd MCMS.Forms/nuget-build
-    - dotnet nuget add source "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/packages/nuget/index.json" --name gitlab --username gitlab-ci-token --password $CI_JOB_TOKEN --store-password-in-clear-text
+    - dotnet nuget add source "$CI_SERVER_URL/api/v4/projects/8/packages/nuget/index.json" --name gitlab --username gitlab-ci-token --password $CI_JOB_TOKEN --store-password-in-clear-text
     - dotnet nuget push "*.nupkg" "*.snupkg" --source gitlab
   only:
     - /^publish-.*$/
