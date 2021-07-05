@@ -48,7 +48,7 @@ gitlab-registry-push:
     - dotnet nuget list source | grep "TDRs GitLab" && dotnet nuget remove source "TDRs GitLab"
     - dotnet nuget add source "https://nuget.tdrs.ro/index.json" --name "TDRs GitLab" --username gitlab-ci-token --password $CI_JOB_TOKEN --store-password-in-clear-text
     - cd MCMS.Forms
-    - dotnet nuget push "./nuget-build/*.nupkg" "./nuget-build/*.snupkg" --source gitlab
+    - dotnet nuget push "./nuget-build/*.nupkg" "./nuget-build/*.snupkg" --source "TDRs GitLab"
   only:
     - /^publish-.*$/
 
