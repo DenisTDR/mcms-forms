@@ -5,13 +5,12 @@ stages:
 
 build-angular:
   stage: build-angular
-  image: node:14-alpine
+  image: node:16-alpine
   before_script:
     - cd mcms-forms-ng
-    - npm i -g npm@latest
-    - npm i
+    - yarn
   script:
-    - npm run build:form
+    - yarn build:form
   artifacts:
     paths:
       - mcms-forms-ng/dist/mcms-form
