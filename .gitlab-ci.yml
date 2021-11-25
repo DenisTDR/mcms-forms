@@ -23,7 +23,7 @@ build-angular:
 
 build-nupkg:
   stage: build-nupkg
-  image: mcr.microsoft.com/dotnet/sdk:5.0
+  image: mcr.microsoft.com/dotnet/sdk:6.0
   needs:
     - build-angular
   script:
@@ -38,7 +38,7 @@ build-nupkg:
 
 gitlab-registry-push:
   stage: push
-  image: mcr.microsoft.com/dotnet/sdk:5.0
+  image: mcr.microsoft.com/dotnet/sdk:6.0
   needs:
     - build-nupkg
   variables:
@@ -53,7 +53,7 @@ gitlab-registry-push:
 
 nuget-push:
   stage: push
-  image: mcr.microsoft.com/dotnet/sdk:5.0
+  image: mcr.microsoft.com/dotnet/sdk:6.0
   variables:
     GIT_STRATEGY: none
   needs:
