@@ -43,6 +43,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "baseHref": "/mcms-forms/",
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -91,36 +92,12 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "mcms-forms:build",
-            "baseHref": "/mcms-forms/"
+            "browserTarget": "mcms-forms:build"
           },
           "configurations": {
             "production": {
               "browserTarget": "mcms-forms:build:production"
             }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "mcms-forms:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": []
           }
         },
         "lint": {
@@ -134,18 +111,6 @@
             "exclude": [
               "**/node_modules/**"
             ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "mcms-forms:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "mcms-forms:serve:production"
-            }
           }
         }
       }
@@ -241,29 +206,6 @@
             }
           }
         },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "mcms-form:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/mcms-form/src/test.ts",
-            "polyfills": "projects/mcms-form/src/polyfills.ts",
-            "tsConfig": "projects/mcms-form/tsconfig.spec.json",
-            "karmaConfig": "projects/mcms-form/karma.conf.js",
-            "assets": [
-              "projects/mcms-form/src/favicon.ico",
-              "projects/mcms-form/src/assets"
-            ],
-            "styles": [
-              "projects/mcms-form/src/styles.scss"
-            ],
-            "scripts": []
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -275,18 +217,6 @@
             "exclude": [
               "**/node_modules/**"
             ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/mcms-form/e2e/protractor.conf.js",
-            "devServerTarget": "mcms-form:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "mcms-form:serve:production"
-            }
           }
         }
       }

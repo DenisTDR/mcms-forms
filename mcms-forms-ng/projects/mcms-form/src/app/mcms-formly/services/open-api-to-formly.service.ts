@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OpenApiConfigService } from './open-api-config.service';
-import { FormlyField, FormlyFieldConfig } from '@ngx-formly/core';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 import { IExtendedOpenApiProperty, IOpenApiDocument, IOpenApiProperty, IOpenApiSchema } from '../models/open-api-models';
 import * as deepmerge from 'deepmerge';
 import { Validators } from '@angular/forms';

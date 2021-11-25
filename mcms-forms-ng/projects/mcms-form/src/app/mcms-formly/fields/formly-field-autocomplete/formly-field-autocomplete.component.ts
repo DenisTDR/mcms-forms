@@ -3,10 +3,9 @@ import { merge, Observable, Subject } from 'rxjs';
 import { FieldType } from '@ngx-formly/core';
 import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
-import { FormlyHelpersApiService } from '../../services/formly-helpers-api.service';
-import OpenApiConfigHelper from '../../services/open-api-config-helper';
 import * as areEqual from 'fast-deep-equal';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { OpenApiToFormlyService } from '../../services/open-api-to-formly.service';
 
 @UntilDestroy()
 @Component({
@@ -73,7 +72,7 @@ export class FormlyFieldAutocompleteComponent extends FieldType implements OnIni
   }
 
   constructor(
-    private has: FormlyHelpersApiService,
+    private openApiToFormlyService: OpenApiToFormlyService,
   ) {
     super();
     this.buildSearchFn();
@@ -113,7 +112,7 @@ export class FormlyFieldAutocompleteComponent extends FieldType implements OnIni
     }
 
     if (this.cc?.reloadOptionsOnInit && (!this.cc?.globalVolatileUrl || this.cc?.urlQueryParams)) {
-      new OpenApiConfigHelper(this.has).loadOptions(this.field).then();
+      this.openApiToFormlyService.helper.loadOptions(this.field).then();
       this.forceReloadButtonHidden = true;
       setTimeout(() => {
         this.forceReloadButtonHidden = false;
@@ -157,7 +156,7 @@ export class FormlyFieldAutocompleteComponent extends FieldType implements OnIni
 
   public forceReloadOptions(callback?: () => void): void {
     if (!this.cc.globalVolatileUrl) {
-      new OpenApiConfigHelper(this.has).loadOptions(this.field, true).then(() => callback?.call(null));
+      this.openApiToFormlyService.helper.loadOptions(this.field, true).then(() => callback?.call(null));
     } else {
       this.formState.vObj[this.cc.globalVolatileUrl].reload();
     }

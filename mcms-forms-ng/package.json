@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "npm run start:mcms-forms",
-    "start:mcms-forms": "ng serve --port 4455 --servePath=mcms-forms --public-host http://localhost:4455 mcms-forms",
+    "start:mcms-forms": "ng serve --port 4455 --servePath=mcms-forms --disable-host-check mcms-forms",
     "build": "npm run build:form",
     "lint": "ng lint --fix",
     "build:form": "npm run bundle:form",
@@ -32,7 +32,6 @@
     "@ngx-formly/core": "^5.10.21",
     "@ungap/custom-elements": "^0.1.15",
     "bootstrap": "^4.6.0",
-    "clone": "^2.1.2",
     "deepmerge": "^4.2.2",
     "fast-deep-equal": "^3.1.3",
     "fast-json-patch": "^3.0.0-1",
@@ -60,10 +59,10 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "ngx-build-plus": "^12.0.1",
     "protractor": "~7.0.0",
-    "query-string": "^6.14.1",
+    "query-string": "^7.0.1",
     "shelljs": "^0.8.4",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "^4.2.4"
+    "typescript": "~4.2.4"
   }
 }
