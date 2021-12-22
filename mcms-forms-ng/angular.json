@@ -43,7 +43,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "baseHref": "/mcms-forms/",
+            "baseHref": "/api/mcms-forms/",
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -98,19 +98,6 @@
             "production": {
               "browserTarget": "mcms-forms:build:production"
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
@@ -204,19 +191,6 @@
             "production": {
               "browserTarget": "mcms-form:build:production"
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/mcms-form/tsconfig.app.json",
-              "projects/mcms-form/tsconfig.spec.json",
-              "projects/mcms-form/e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
