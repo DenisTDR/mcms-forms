@@ -44,7 +44,8 @@ export class FormlyHelpersApiService {
     if (!this.subjects[url]) {
       this.subjects[url] = new Subject<T>();
     }
-    // merge the request observable with the Subject, which will be triggered (*) when a new value will be fetch from backend in the future
+    // merge the request observable with the Subject,
+    // which will be triggered (*) when a new value will be fetched from backend in the future
     return merge(this.makeGetObservable(url, noCache), this.subjects[url])
       // pipe a distinctUntilChanged operator to avoid duplicate values on first request
       .pipe(distinctUntilChanged((a, b) => {

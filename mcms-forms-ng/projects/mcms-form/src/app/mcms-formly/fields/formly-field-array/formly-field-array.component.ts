@@ -32,8 +32,7 @@ export class FormlyFieldArrayComponent extends FieldArrayType implements OnInit 
 
   private lastMinLength: number;
 
-  public get customFieldConfig():
-    { removeDisabled?: boolean, addDisabled?: boolean, sortable?: boolean, addButtonContent?: string, removeButtonContent?: string } {
+  public get customFieldConfig(): FormlyFieldArrayCustomFieldConfig {
     return this.to.customFieldConfig;
   }
 
@@ -55,7 +54,7 @@ export class FormlyFieldArrayComponent extends FieldArrayType implements OnInit 
       }
     });
     this.field.fieldArray.fieldGroupClassName = this.field.fieldGroupClassName;
-    this.field.fieldArray.className = this.field.className;
+    this.field.fieldArray.className = this.customFieldConfig.fieldArrayClassName || this.field.className;
     for (const formlyFieldConfig of this.field.fieldGroup) {
       formlyFieldConfig.fieldGroupClassName = this.field.fieldGroupClassName;
       formlyFieldConfig.className = this.field.className;
@@ -104,4 +103,13 @@ export class FormlyFieldArrayComponent extends FieldArrayType implements OnInit 
   private get currentLength(): number {
     return this.model.length;
   }
+}
+
+interface FormlyFieldArrayCustomFieldConfig {
+  removeDisabled?: boolean;
+  addDisabled?: boolean;
+  sortable?: boolean;
+  addButtonContent?: string;
+  removeButtonContent?: string;
+  fieldArrayClassName?: string;
 }
