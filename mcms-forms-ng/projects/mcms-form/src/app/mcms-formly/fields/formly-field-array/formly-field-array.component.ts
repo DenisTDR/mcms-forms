@@ -57,7 +57,7 @@ export class FormlyFieldArrayComponent extends FieldArrayType implements OnInit 
     this.field.fieldArray.className = this.customFieldConfig.fieldArrayClassName || this.field.className;
     for (const formlyFieldConfig of this.field.fieldGroup) {
       formlyFieldConfig.fieldGroupClassName = this.field.fieldGroupClassName;
-      formlyFieldConfig.className = this.field.className;
+      formlyFieldConfig.className = this.customFieldConfig.fieldArrayClassName || this.field.className;
     }
   }
 
