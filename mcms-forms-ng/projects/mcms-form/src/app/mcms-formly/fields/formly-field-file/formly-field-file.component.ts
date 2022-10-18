@@ -210,7 +210,7 @@ export class FormlyFieldFileComponent extends FieldType implements OnInit {
           fileToUpload.progress = Math.round(event.loaded / event.total * 10000) / 100;
         }
         if (event.type === HttpEventType.Response) {
-          fileToUpload.backendFile = {id: event.body.id, ownerToken: event.body.ownerToken};
+          fileToUpload.backendFile = {id: event.body.id, ownerToken: event.body.ownerToken, link: event.body.link};
           fileToUpload.state = 'uploaded';
           fileToUpload.uploadSubscription = null;
           this.updateValueAndState();

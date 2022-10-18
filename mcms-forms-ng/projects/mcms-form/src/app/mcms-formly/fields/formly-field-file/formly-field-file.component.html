@@ -24,9 +24,16 @@
     </ngx-file-drop>
     <div *ngIf="processedFiles.length">
       <div *ngFor="let item of processedFiles; let i=index">
-        <b class="px-2">{{ item.name }}</b> | <b class="px-2">{{item.state}}
-        <span *ngIf="item.state === 'uploading'">{{item.progress | number:'1.2-2'}}%</span>
-        <span *ngIf="item.state === 'error' && item.errorReason">: {{item.errorReason}}</span>
+        <b class="px-2">
+          <span *ngIf="!item.backendFile?.link"> {{ item.name }}</span>
+          <span *ngIf="item.backendFile?.link" [innerHTML]="item.backendFile.link"></span>
+        </b> | <b class="px-2">{{item.state}}
+        <ng-container [ngSwitch]="item.state">
+          <span *ngSwitchCase="'uploading'">{{item.progress | number:'1.2-2'}}%</span>
+          <ng-container *ngSwitchCase="'error'">
+            <ng-container *ngIf="item.errorReason">: {{item.errorReason}}</ng-container>
+          </ng-container>
+        </ng-container>
       </b>
         <button (click)="remove(i)" class="btn btn-outline-danger btn-sm" type="button">
           <ng-container *ngTemplateOutlet="removeSvgTemplate"></ng-container>
@@ -34,7 +41,7 @@
 
         <button (click)="retry(i)" class="btn btn-outline-info btn-sm ml-2" type="button"
                 *ngIf="item.state === 'error'">
-          <ng-container *ngTemplateOutlet="redoSvg"></ng-container>
+          <ng-container *ngTemplateOutlet="redoSvgTemplate"></ng-container>
         </button>
 
       </div>
@@ -50,7 +57,7 @@
   </svg>
 </ng-template>
 
-<ng-template #redoSvg>
+<ng-template #redoSvgTemplate>
   <svg focusable="false" data-prefix="fas" data-icon="redo" width="1em" height="1em"
        role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
     <path fill="currentColor"

@@ -18,7 +18,7 @@ export interface FormlyFileFieldConfig {
 export interface ProcessedFile {
   droppedFile?: NgxFileDropEntry;
   systemFile?: File;
-  backendFile?: { id: string, ownerToken: string };
+  backendFile?: { id: string, ownerToken: string, link?: string };
   state: FormlyFileFieldState;
   progress?: number;
   uploadSubscription?: Subscription;
