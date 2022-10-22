@@ -4,4 +4,5 @@
   [editor]="Editor"
   [formControl]="formControl"
   (keyup.enter)="$event.stopPropagation();"
+  (ready)="ckeditorReady($event)"
 ></ckeditor>

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import * as BalloonEditorMcms from '@mcms-cs/ckeditor5-build-balloon';
 import { FieldType } from '@ngx-formly/core';
+import { CKEditorComponent } from '@ckeditor/ckeditor5-angular';
 
 @Component({
   selector: 'mcms-field-ckeditor',
@@ -19,7 +20,19 @@ export class FormlyFieldCkeditorComponent extends FieldType implements OnInit {
     },
   };
 
+  @ViewChild(CKEditorComponent)
+  public ckeditor!: CKEditorComponent;
+
   public ngOnInit(): void {
     this.CKEDITOR_CONFIG.simpleUpload.uploadUrl = this.to?.customFieldConfig?.imageUploadUrl || this.CKEDITOR_CONFIG.simpleUpload.uploadUrl;
+  }
+
+  public ckeditorReady(editor: any): void {
+    // https://github.com/ckeditor/ckeditor5/issues/727#issuecomment-352477990
+    const bodyCollection = editor.ui.view.body._parentElement.parentElement;
+    const closestModal = editor.ui.view.editable.element.closest('.modal');
+    if (closestModal) {
+      closestModal.append(bodyCollection);
+    }
   }
 }
