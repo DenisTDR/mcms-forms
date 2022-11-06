@@ -3,7 +3,7 @@ import { OpenApiConfigService } from './open-api-config.service';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { IExtendedOpenApiProperty, IOpenApiDocument, IOpenApiProperty, IOpenApiSchema } from '../models/open-api-models';
 import * as deepmerge from 'deepmerge';
-import { Validators } from '@angular/forms';
+import { AbstractControl, Validators } from '@angular/forms';
 import clone from 'clone';
 import { FormlyHelpersApiService } from './formly-helpers-api.service';
 import safeEvalFormlyExpression from './safe-eval-formly-expression';
@@ -155,10 +155,10 @@ export class OpenApiToFormlyService {
 
           const autoFillValue = safeEvalFormlyExpression(autoFillConfig.expression, field);
           autoFillConfig.enabled = field.formControl.value === autoFillValue;
-
           if (autoFillConfig.forceEnableIfSourceChanged) {
             autoFillConfig.tmpAutoFillValue = autoFillValue;
-            field.form.valueChanges.subscribe(_ => {
+            // field.form
+            this.getRootForm(field.form).valueChanges.subscribe(_ => {
               if (autoFillConfig.enabled) {
                 return;
               }
@@ -177,7 +177,8 @@ export class OpenApiToFormlyService {
           }
         }
 
-        field.form.valueChanges.subscribe(value => {
+        // field.form
+        this.getRootForm(field.form).valueChanges.subscribe(value => {
           if (!autoFillConfig.enabled || autoFillConfig.enableExpressionResult === false) {
             return;
           }
@@ -198,6 +199,13 @@ export class OpenApiToFormlyService {
     if (autoFillConfig.enableExpression) {
       fieldConfig.expressionProperties['templateOptions.autoFill.enableExpressionResult'] = autoFillConfig.enableExpression;
     }
+  }
+
+  private getRootForm(formControl: AbstractControl): AbstractControl {
+    if (formControl?.parent == null) {
+      return formControl;
+    }
+    return this.getRootForm(formControl.parent);
   }
 
   private buildValidators(prop: IOpenApiProperty, fieldConfig: FormlyFieldConfig): void {
