@@ -153,10 +153,15 @@ export class OpenApiToFormlyService {
         if (autoFillConfig.onlyIfUntouched && autoFillConfig.checkIfTouchedOnInit) {
           autoFillConfig = field.templateOptions.autoFill;
 
-          const autoFillValue = safeEvalFormlyExpression(autoFillConfig.expression, field);
-          autoFillConfig.enabled = field.formControl.value === autoFillValue;
+          const computedValue = safeEvalFormlyExpression(autoFillConfig.expression, field);
+
+          if (autoFillConfig.useAsDefaultValue && field.formControl.value === null) {
+            field.formControl.setValue(computedValue);
+          }
+
+          autoFillConfig.enabled = field.formControl.value === computedValue;
           if (autoFillConfig.forceEnableIfSourceChanged) {
-            autoFillConfig.tmpAutoFillValue = autoFillValue;
+            autoFillConfig.tmpAutoFillValue = computedValue;
             // field.form
             this.getRootForm(field.form).valueChanges.subscribe(_ => {
               if (autoFillConfig.enabled) {
