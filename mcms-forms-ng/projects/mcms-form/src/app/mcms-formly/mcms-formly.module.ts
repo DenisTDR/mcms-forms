@@ -37,6 +37,7 @@ import { WrapperHeaderActionsComponent } from './components/wrapper-header-actio
 import { AlertModalComponent } from './components/alert-modal/alert-modal.component';
 import { MessagesService } from './services/messages.service';
 import { FormlyButtonComponent } from './fields/formly-button/formly-button.component';
+import { FormlyFieldChecklistComponent } from './fields/formly-field-checklist/formly-field-checklist.component';
 
 const usedNgbModules = [
   NgbDatepickerModule,
@@ -74,6 +75,7 @@ const wrappers = [
     WrapperHeaderActionsComponent,
     AlertModalComponent,
     FormlyButtonComponent,
+    FormlyFieldChecklistComponent,
   ],
   imports: [
     CommonModule,
