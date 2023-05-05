@@ -22,9 +22,6 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
         </div>
       </div>
     </ng-container>
-    <div>
-      <pre>{{checkedOptions | json}}</pre>
-    </div>
   `,
 })
 export class FormlyFieldChecklistComponent extends FieldType implements OnInit {
