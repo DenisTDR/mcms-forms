@@ -51,7 +51,7 @@ export class FormlyFieldDateTimeComponent extends FieldType implements OnInit {
     if (!value) {
       return;
     }
-    const split = value.split('T');
+    const split = value.split(value.includes('T') ? 'T' : ' ');
     if (split[0] !== this.dateFormControl.value) {
       this.dateFormControl.setValue(this.dateAdapter.placeholderProject(split[0]));
     }
