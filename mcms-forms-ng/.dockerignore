@@ -1,0 +1,6 @@
+**/.angular
+**/.vscode
+**/node_modules
+**/.git
+**/Dockerfile
+**/docker-compose.yml
