@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "npm run start:mcms-forms",
-    "start:mcms-forms": "ng serve --port 4455 --servePath=api/mcms-forms --disable-host-check mcms-forms",
+    "start:mcms-forms": "ng serve --port 4455 --servePath=mcms-forms --disable-host-check mcms-forms",
     "build": "npm run build:form",
     "lint": "ng lint --fix",
     "build:form": "npm run bundle:form",
