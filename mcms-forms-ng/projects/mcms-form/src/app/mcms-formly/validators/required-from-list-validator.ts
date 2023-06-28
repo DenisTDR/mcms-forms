@@ -1,8 +1,8 @@
-import { FormControl, ValidationErrors } from '@angular/forms';
+import { UntypedFormControl, ValidationErrors } from '@angular/forms';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 
 export default function requiredFromListValidator(
-  control: FormControl, field: FormlyFieldConfig): ValidationErrors {
+  control: UntypedFormControl, field: FormlyFieldConfig): ValidationErrors {
   if (!control.value) {
     return null;
   }

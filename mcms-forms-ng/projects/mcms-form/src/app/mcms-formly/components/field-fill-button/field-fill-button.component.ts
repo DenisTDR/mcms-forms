@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormlyFieldConfig, FormlyFormOptions, FormlyTemplateOptions } from '@ngx-formly/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import clone from 'clone';
 
 @Component({
@@ -50,7 +50,7 @@ export class FieldFillButtonComponent {
   }
 
   public subFields: FormlyFieldConfig[];
-  public form: FormGroup = new FormGroup({});
+  public form: UntypedFormGroup = new UntypedFormGroup({});
   public model: { fillValue?: any } = {};
   public options: FormlyFormOptions = {};
 

@@ -1,5 +1,5 @@
 import { Observable, Subject } from 'rxjs';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { OpenApiToFormlyService } from './services/open-api-to-formly.service';
 import { ApiService } from '../services/api.service';
@@ -31,7 +31,7 @@ export class FormlyFormManager {
     return this.stateChangedSubject.asObservable();
   }
 
-  private get form(): FormGroup {
+  private get form(): UntypedFormGroup {
     return this.component.form;
   }
 

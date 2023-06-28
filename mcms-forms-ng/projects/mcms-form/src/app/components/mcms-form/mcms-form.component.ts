@@ -8,7 +8,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { FormlyFormManager } from '../../mcms-formly/formly-form-manager';
 import { McmsFormState } from './mcms-form-state';
@@ -50,7 +50,7 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
   public isDebug: boolean;
   public state: McmsFormState;
 
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public model = {};
   public fields: FormlyFieldConfig[];
 
@@ -107,7 +107,7 @@ export class McmsFormComponent implements OnInit, AfterViewInit, OnChanges {
 
   public async load(): Promise<void> {
     // console.log('load()');
-    this.form = new FormGroup({});
+    this.form = new UntypedFormGroup({});
 
     this.form.valueChanges.pipe(untilDestroyed(this), debounceTime(500)).subscribe(value => {
       this.customEvent.emit({type: 'form-updated', data: {value, status: this.form.status}});

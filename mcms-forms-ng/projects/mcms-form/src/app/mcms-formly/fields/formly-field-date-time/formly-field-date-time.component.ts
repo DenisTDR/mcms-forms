@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FieldType } from '@ngx-formly/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { NgbDateAdapter, NgbDateParserFormatter, NgbTimeAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { CustomDateAdapter } from '../formly-field-date/custom-date-adapter.service';
 import { CustomDateParserFormatter } from '../formly-field-date/custom-date-parser.formatter';
@@ -22,8 +22,8 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
   ],
 })
 export class FormlyFieldDateTimeComponent extends FieldType implements OnInit {
-  public timeFormControl: FormControl = new FormControl();
-  public dateFormControl: FormControl = new FormControl();
+  public timeFormControl: UntypedFormControl = new UntypedFormControl();
+  public dateFormControl: UntypedFormControl = new UntypedFormControl();
 
 
   constructor(
