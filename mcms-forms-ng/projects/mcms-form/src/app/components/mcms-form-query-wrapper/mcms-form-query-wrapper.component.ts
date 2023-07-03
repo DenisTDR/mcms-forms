@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { parse } from 'query-string';
+import queryString from 'query-string';
 import { McmsFormParamsWrapperComponent } from '../mcms-form-params-wrapper/mcms-form-params-wrapper.component';
 
 @Component({
@@ -18,7 +18,7 @@ export class McmsFormQueryWrapperComponent implements OnInit {
     if (!window.location.search) {
       throw new Error('query not provided');
     }
-    const queryObj = parse(window.location.search);
+    const queryObj = queryString.parse(window.location.search);
     for (const field of this.fields) {
       if (queryObj[field] !== undefined) {
         this.paramsObj[field] = JSON.parse(queryObj[field] as string);
