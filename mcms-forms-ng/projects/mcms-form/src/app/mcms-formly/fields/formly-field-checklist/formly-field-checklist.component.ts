@@ -6,22 +6,20 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 @Component({
   selector: 'app-formly-field-checklist',
   template: `
-    <ng-container *ngIf="checkListOptions">
-      <div [ngClass]="to.customFieldConfig?.optionClass || 'my-2'" *ngFor="let opt of checkListOptions">
-        <div class="custom-control custom-switch" (click)="input.click();">
-          <input class="custom-control-input"
-                 type="checkbox"
-                 #input
-                 [checked]="checkedOptions[opt.value]"
-                 (click)="$event.stopPropagation()"
-                 (change)="toggleOption(opt.value)"
-          >
-          <label class="custom-control-label">
-            {{opt.label}}
-          </label>
-        </div>
-      </div>
-    </ng-container>
+      <ng-container *ngIf="checkListOptions">
+          <div [ngClass]="to.customFieldConfig?.optionClass || 'my-2'" *ngFor="let opt of checkListOptions">
+              <div class="custom-control custom-switch" (click)="input.click();">
+                  <input class="custom-control-input"
+                         type="checkbox"
+                         #input
+                         [checked]="checkedOptions[opt.value]"
+                         (click)="$event.stopPropagation()"
+                         (change)="toggleOption(opt.value)"
+                  >
+                  <label class="custom-control-label" [innerHTML]="opt.label"></label>
+              </div>
+          </div>
+      </ng-container>
   `,
 })
 export class FormlyFieldChecklistComponent extends FieldType implements OnInit {
