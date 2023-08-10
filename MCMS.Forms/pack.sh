@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [ $# -eq 0 ] || [[ $1 != "publish-"* ]]; then
   echo "Invalid git tag argument supplied. Usage: pack.sh publish-x.y.z"
   exit 1

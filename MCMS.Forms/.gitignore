@@ -86,5 +86,5 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/dotnetcore,rider
 
-/wwwroot
+/wwwroot/mcms-forms-files
 /nuget-build

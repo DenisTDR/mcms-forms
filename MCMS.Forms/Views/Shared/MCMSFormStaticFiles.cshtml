@@ -2,24 +2,15 @@
 @{
     var basePath = MCMSFormsHelper.GetBasePath(Url);
 }
+<script src="~/_content/MCMS.Forms/mcms-forms-files-loader.js"></script>
 <script>
     const mcmsFormsStaticFiles = {
         load: () => {
             if (mcmsFormsStaticFiles.loaded) { return; }
             mcmsFormsStaticFiles.loaded = true;
-            for (let i = 0; i < mcmsFormsStaticFiles.files.js.length; i++) {
-                const script = document.createElement('script');
-                script.src = mcmsFormsStaticFiles.files.js[i];
-                script.onerror = (e) => {
-                    if (mcmsFormsStaticFiles.loadError) {
-                        return;    
-                    }
-                    mcmsFormsStaticFiles.loadError = true;
-                    console.error(e);
-                    alert('Couldn\'t load MCMS Forms scripts. Please try refreshing the page.');
-                };
-                document.body.appendChild(script);
-            }
+            
+            mcmsFormsStaticFilesLoader.loadScripts(mcmsFormsStaticFiles.files.js);
+          
             for (let j = 0; j < mcmsFormsStaticFiles.files.css.length; j++) {
                 const link = document.createElement('link');
                 link.href = mcmsFormsStaticFiles.files.css[j];
@@ -35,6 +26,5 @@
             ],
             css:  ["@basePath/styles.css"]
         },
-        loadError: false,
     }
 </script>
