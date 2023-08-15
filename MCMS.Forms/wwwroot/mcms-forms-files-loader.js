@@ -21,7 +21,6 @@ const mcmsFormsStaticFilesLoader = {
             alert('Couldn\'t load MCMS Forms scripts. Please try refreshing the page.');
         };
         script.onload = (e) => {
-            console.log('script loaded');
             callback();
         }
         document.body.appendChild(script);
